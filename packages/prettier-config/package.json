@@ -1,0 +1,13 @@
+{
+  "name": "@talkio/prettier-config",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}

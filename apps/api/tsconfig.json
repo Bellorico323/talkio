@@ -1,5 +1,5 @@
 {
-  "extends": "@talkio/typescript-config/nextjs",
+  "extends": "@talkio/typescript-config/base.json",
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {

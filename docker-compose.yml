@@ -1,0 +1,15 @@
+services:
+  postgres:
+    container_name: talkio-postgres
+    image: bitnami/postgresql:17.4.0
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=talkio
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+volumes:
+  postgres_data:
