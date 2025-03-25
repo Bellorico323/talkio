@@ -1,14 +1,13 @@
 import { MessageCircleCodeIcon } from 'lucide-react'
 import { ThemeToggle } from './components/theme-toggle'
-import { Conversation } from './components/conversation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Chat } from './components/chat'
-import { HeaderMenu } from './components/header-menu'
+import { Sidebar } from './components/sidebar'
 
 export function MainPage() {
   return (
-    <div className="min-h-screen p-10 bg-muted antialiased">
-      <div className="flex flex-col max-w-[1220px] mx-auto bg-background text-foreground rounded-lg">
+    <div className="h-screen p-10 bg-muted antialiased">
+      <div className="flex flex-col max-w-[1220px] mx-auto bg-background text-foreground rounded-lg h-full">
         <header className="py-3 px-6 flex justify-between border-b">
           <div className="flex gap-1 items-center">
             <MessageCircleCodeIcon />
@@ -16,16 +15,11 @@ export function MainPage() {
           </div>
           <ThemeToggle />
         </header>
-        <div className="w-full py-3 px-6 grid grid-cols-[300px_1fr]">
-          <aside className="flex flex-col gap-6 border-r">
-            <HeaderMenu />
-            <ul className="flex flex-col space-y-3">
-              <Conversation />
-            </ul>
-          </aside>
+        <div className="w-full py-3 px-6 grid grid-cols-[300px_1fr] h-full">
+        <Sidebar />
 
-          <div className="">
-            <div className=" border-b px-6 py-2 h-14 flex gap-3">
+        <div className="flex flex-col">
+            <div className=" border-b px-6 py-3 h-14 flex gap-3">
               <Avatar className="size-9">
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
@@ -35,7 +29,7 @@ export function MainPage() {
                 <span className="text-xs text-muted-foreground">Online</span>
               </div>
             </div>
-            <div className="pl-6 py-4">
+            <div className="pl-6 pt-4 h-full">
               <Chat />
             </div>
           </div>

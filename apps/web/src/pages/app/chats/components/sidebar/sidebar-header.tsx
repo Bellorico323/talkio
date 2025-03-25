@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { MessageCirclePlus, Plus, UserPlus } from 'lucide-react'
 
-export function HeaderMenu() {
+export function SidebarHeader() {
   return (
     <div className="border-b py-2 h-14 flex justify-between items-center pr-3">
       <strong className="text-lg">Chats</strong>

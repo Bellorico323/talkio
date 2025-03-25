@@ -15,16 +15,6 @@ export function Chat() {
   const connection = useRef<null | WebSocket>(null)
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState<Message[]>([
-    // {
-    //   userId: '1',
-    //   content: 'Oi, tudo bem ?',
-    //   messageId: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-    // },
-    // {
-    //   userId: '2',
-    //   content: 'Oi, tudo bem e você ?',
-    //   messageId: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-    // },
   ])
 
   useEffect(() => {
@@ -76,8 +66,8 @@ export function Chat() {
   }
 
   return (
-    <Card className="shadow-xs">
-      <CardContent className="flex flex-col gap-2">
+    <Card className="shadow-xs h-full flex flex-col">
+      <CardContent className="flex flex-col gap-2 flex-1">
         {messages.map((message) => (
           <div
             key={message.messageId}

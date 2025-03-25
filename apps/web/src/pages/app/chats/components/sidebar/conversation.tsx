@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export function Conversation() {
   return (
-    <li className="flex items-center gap-3">
+    <li className="flex items-center gap-3 hover:bg-muted rounded-lg p-2 hover:cursor-pointer">
       <Avatar className="size-10">
         <AvatarImage src="https://github.com/Bellorico323.png" />
         <AvatarFallback>CN</AvatarFallback>
