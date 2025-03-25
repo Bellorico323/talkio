@@ -2,6 +2,9 @@
   "extends": "@talkio/typescript-config/nextjs",
   "compilerOptions": {
     "baseUrl": "./",
+    "lib": [
+      "DOM"
+    ],
     "paths": {
       "@/*": [
         "src/*"

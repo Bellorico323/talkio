@@ -2,6 +2,7 @@ import { createId } from '@paralleldrive/cuid2'
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 import { chats } from './chats'
 import { users } from './users'
+import { relations } from 'drizzle-orm'
 
 export const userChats = pgTable('user_chats', {
   id: text('id')
@@ -15,4 +16,19 @@ export const userChats = pgTable('user_chats', {
   }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   joinedAt: timestamp('created_at').notNull().defaultNow(),
+})
+
+export const userChatsRelations = relations(userChats, ({ one }) => {
+  return {
+    chats: one(chats, {
+      fields: [userChats.chatId],
+      references: [chats.id],
+      relationName: 'user_chat_chat',
+    }),
+    users: one(users, {
+      fields: [userChats.userId],
+      references: [users.id],
+      relationName: 'user_chat_user',
+    }),
+  }
 })

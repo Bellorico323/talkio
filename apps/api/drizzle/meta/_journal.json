@@ -15,6 +15,13 @@
       "when": 1742784354265,
       "tag": "0001_eminent_kylun",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742870064735,
+      "tag": "0002_neat_sharon_ventura",
+      "breakpoints": true
     }
   ]
 }

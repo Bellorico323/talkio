@@ -3,6 +3,7 @@ import { ThemeToggle } from './components/theme-toggle'
 import { Conversation } from './components/conversation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Chat } from './components/chat'
+import { HeaderMenu } from './components/header-menu'
 
 export function MainPage() {
   return (
@@ -17,9 +18,7 @@ export function MainPage() {
         </header>
         <div className="w-full py-3 px-6 grid grid-cols-[300px_1fr]">
           <aside className="flex flex-col gap-6 border-r">
-            <div className="border-b py-2 h-14">
-              <strong className="text-lg">Chats</strong>
-            </div>
+            <HeaderMenu />
             <ul className="flex flex-col space-y-3">
               <Conversation />
             </ul>
