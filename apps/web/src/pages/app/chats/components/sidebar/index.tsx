@@ -9,6 +9,7 @@ interface GetChatsResponse {
   chats: {
     friendId: string
     friendName: string
+    avatarUrl: string
   }[]
 }
 

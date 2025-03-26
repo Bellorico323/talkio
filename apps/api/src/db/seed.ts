@@ -24,6 +24,7 @@ const [user] = await db
   .values({
     name: faker.person.fullName(),
     email: 'user@test.com',
+    avatarUrl: faker.image.avatarGitHub(),
   })
   .returning()
 
@@ -40,14 +41,17 @@ const [friend1, friend2, friend3] = await db
     {
       name: faker.person.fullName(),
       email: faker.internet.email(),
+      avatarUrl: faker.image.avatarGitHub(),
     },
     {
       name: faker.person.fullName(),
       email: faker.internet.email(),
+      avatarUrl: faker.image.avatarGitHub(),
     },
     {
       name: faker.person.fullName(),
       email: faker.internet.email(),
+      avatarUrl: faker.image.avatarGitHub(),
     },
   ])
   .returning()

@@ -4,7 +4,8 @@ import { chatHistory } from './routes/chat-history.js'
 import cors from '@elysiajs/cors'
 import { sendAuthLink } from './routes/send-auth-link.js'
 import { authenticateFromLink } from './routes/authenticate-from-link.js'
-import { getUserChats } from './routes/get-user-chats.js'
+import { fetchUserChats } from './routes/fetch-user-chats.js'
+import { getProfile } from './routes/get-profile.js'
 
 const app = new Elysia()
   .onError(({ code, error, set }) => {
@@ -27,7 +28,8 @@ const app = new Elysia()
   .use(chatHistory)
   .use(sendAuthLink)
   .use(authenticateFromLink)
-  .use(getUserChats)
+  .use(fetchUserChats)
+  .use(getProfile)
   .use(cors())
 
 app.listen(3333, () => {

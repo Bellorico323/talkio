@@ -4,7 +4,7 @@ import { db } from '@/db/connection'
 import { userChats, users } from '@/db/schema'
 import { and, eq, inArray, ne } from 'drizzle-orm'
 
-export const getUserChats = new Elysia()
+export const fetchUserChats = new Elysia()
   .use(auth)
   .get('/chats', async ({ getCurrentUser }) => {
     const { userId } = await getCurrentUser()
@@ -26,6 +26,7 @@ export const getUserChats = new Elysia()
       .select({
         friendId: users.id,
         friendName: users.name,
+        avatarUrl: users.avatarUrl,
       })
       .from(userChats)
       .innerJoin(users, eq(users.id, userChats.userId))

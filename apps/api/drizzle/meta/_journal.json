@@ -36,6 +36,13 @@
       "when": 1742949091717,
       "tag": "0004_faithful_jack_flag",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1742954576667,
+      "tag": "0005_next_puppet_master",
+      "breakpoints": true
     }
   ]
 }

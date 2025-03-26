@@ -4,6 +4,7 @@ interface ConversationProps {
   data: {
     friendId: string
     friendName: string
+    avatarUrl: string
   }
 }
 
@@ -11,7 +12,7 @@ export function Conversation({ data }: ConversationProps) {
   return (
     <li className="flex items-center gap-3 hover:bg-muted rounded-lg p-2 hover:cursor-pointer">
       <Avatar className="size-10">
-        <AvatarImage src="https://github.com/Bellorico323.png" />
+        <AvatarImage src={data.avatarUrl} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
 
