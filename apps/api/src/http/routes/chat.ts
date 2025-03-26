@@ -4,7 +4,7 @@ import { ElysiaWS } from 'elysia/ws'
 
 const clients: Set<ElysiaWS> = new Set()
 
-export const chat = new Elysia().ws('/chat', {
+export const chat = new Elysia().ws('/connect', {
   body: t.Object({
     userId: t.String(),
     content: t.String(),

@@ -14,39 +14,38 @@ interface Message {
 export function Chat() {
   const connection = useRef<null | WebSocket>(null)
   const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState<Message[]>([
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
 
-  useEffect(() => {
-    const socket = new WebSocket('http://localhost:3333/chat')
+  // useEffect(() => {
+  //   const socket = new WebSocket('http://localhost:3333/chat')
 
-    connection.current = socket
+  //   connection.current = socket
 
-    const handleOpen = () => {
-      socket.send('Connection established')
-    }
+  //   const handleOpen = () => {
+  //     socket.send('Connection established')
+  //   }
 
-    const handleMessage = (event: MessageEvent) => {
-      const message = JSON.parse(event.data)
+  //   const handleMessage = (event: MessageEvent) => {
+  //     const message = JSON.parse(event.data)
 
-      console.log('Mensagem recebida do servidor:', message)
-      if (message.type !== 'validation') {
-        setMessages((prevMessages) => [...prevMessages, JSON.parse(event.data)])
-      }
-    }
+  //     console.log('Mensagem recebida do servidor:', message)
+  //     if (message.type !== 'validation') {
+  //       setMessages((prevMessages) => [...prevMessages, JSON.parse(event.data)])
+  //     }
+  //   }
 
-    socket.addEventListener('open', handleOpen)
-    socket.addEventListener('message', handleMessage)
+  //   socket.addEventListener('open', handleOpen)
+  //   socket.addEventListener('message', handleMessage)
 
-    return () => {
-      if (connection.current instanceof WebSocket) {
-        connection.current.removeEventListener('open', handleOpen)
-        connection.current.removeEventListener('message', handleMessage)
-        connection.current.close()
-        connection.current = null
-      }
-    }
-  }, [])
+  //   return () => {
+  //     if (connection.current instanceof WebSocket) {
+  //       connection.current.removeEventListener('open', handleOpen)
+  //       connection.current.removeEventListener('message', handleMessage)
+  //       connection.current.close()
+  //       connection.current = null
+  //     }
+  //   }
+  // }, [])
 
   function sendMessage() {
     if (

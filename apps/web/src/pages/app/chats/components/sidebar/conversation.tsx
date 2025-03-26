@@ -1,6 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-export function Conversation() {
+interface ConversationProps {
+  data: {
+    friendId: string
+    friendName: string
+  }
+}
+
+export function Conversation({ data }: ConversationProps) {
   return (
     <li className="flex items-center gap-3 hover:bg-muted rounded-lg p-2 hover:cursor-pointer">
       <Avatar className="size-10">
@@ -9,7 +16,7 @@ export function Conversation() {
       </Avatar>
 
       <div className="flex flex-col">
-        <span className="text-base font-medium">Murillo Orico</span>
+        <span className="text-base font-medium">{data.friendName}</span>
         <span className="text-sm text-neutral-500">Minha ultima mensagem</span>
       </div>
     </li>

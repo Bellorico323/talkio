@@ -1,0 +1,1 @@
+ALTER TABLE "user_chats" ADD COLUMN "joined_at" timestamp DEFAULT now() NOT NULL;

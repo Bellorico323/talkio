@@ -1,22 +1,26 @@
 import { createId } from '@paralleldrive/cuid2'
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core'
 import { chats } from './chats'
 import { users } from './users'
 import { relations } from 'drizzle-orm'
 
-export const userChats = pgTable('user_chats', {
-  id: text('id')
-    .$defaultFn(() => createId())
-    .primaryKey(),
-  chatId: text('chat_id').references(() => chats.id, {
-    onDelete: 'no action',
-  }),
-  userId: text('user_id').references(() => users.id, {
-    onDelete: 'cascade',
-  }),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  joinedAt: timestamp('created_at').notNull().defaultNow(),
-})
+export const userChats = pgTable(
+  'user_chats',
+  {
+    id: text('id')
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    chatId: text('chat_id').references(() => chats.id, {
+      onDelete: 'no action',
+    }),
+    userId: text('user_id').references(() => users.id, {
+      onDelete: 'cascade',
+    }),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    joinedAt: timestamp('joined_at').notNull().defaultNow(),
+  },
+  (t) => [unique().on(t.userId, t.chatId)],
+)
 
 export const userChatsRelations = relations(userChats, ({ one }) => {
   return {

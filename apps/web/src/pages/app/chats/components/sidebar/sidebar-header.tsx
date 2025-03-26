@@ -19,11 +19,11 @@ export function SidebarHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="bottom" align="end">
-          <DropdownMenuItem>
+          <DropdownMenuItem className="p-3">
             <UserPlus />
             Add contact
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="p-3">
             <MessageCirclePlus />
             New chat
           </DropdownMenuItem>

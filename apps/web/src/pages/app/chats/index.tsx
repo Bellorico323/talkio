@@ -16,9 +16,9 @@ export function MainPage() {
           <ThemeToggle />
         </header>
         <div className="w-full py-3 px-6 grid grid-cols-[300px_1fr] h-full">
-        <Sidebar />
+          <Sidebar />
 
-        <div className="flex flex-col">
+          <div className="flex flex-col h-full">
             <div className=" border-b px-6 py-3 h-14 flex gap-3">
               <Avatar className="size-9">
                 <AvatarImage src="https://github.com/shadcn.png" />

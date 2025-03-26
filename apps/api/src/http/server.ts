@@ -1,6 +1,10 @@
 import { Elysia } from 'elysia'
 import { chat } from './routes/chat.js'
 import { chatHistory } from './routes/chat-history.js'
+import cors from '@elysiajs/cors'
+import { sendAuthLink } from './routes/send-auth-link.js'
+import { authenticateFromLink } from './routes/authenticate-from-link.js'
+import { getUserChats } from './routes/get-user-chats.js'
 
 const app = new Elysia()
   .onError(({ code, error, set }) => {
@@ -21,6 +25,10 @@ const app = new Elysia()
 
   .use(chat)
   .use(chatHistory)
+  .use(sendAuthLink)
+  .use(authenticateFromLink)
+  .use(getUserChats)
+  .use(cors())
 
 app.listen(3333, () => {
   console.log(
