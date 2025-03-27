@@ -10,6 +10,7 @@ interface GetChatsResponse {
     friendId: string
     friendName: string
     avatarUrl: string
+    chatId: string
   }[]
 }
 
@@ -29,7 +30,7 @@ export function Sidebar() {
       <SidebarHeader />
       <ScrollArea className="flex-1 max-h-[70vh] pr-4">
         {chats &&
-          chats.map((chat) => <Conversation key={chat.friendId} data={chat} />)}
+          chats.map((chat) => <Conversation key={chat.chatId} data={chat} />)}
       </ScrollArea>
       <SidebarFooter />
     </aside>

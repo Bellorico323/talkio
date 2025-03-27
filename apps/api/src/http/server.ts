@@ -6,6 +6,7 @@ import { sendAuthLink } from './routes/send-auth-link.js'
 import { authenticateFromLink } from './routes/authenticate-from-link.js'
 import { fetchUserChats } from './routes/fetch-user-chats.js'
 import { getProfile } from './routes/get-profile.js'
+import { sendFriendshipRequest } from './routes/send-friendship-request.js'
 
 const app = new Elysia()
   .onError(({ code, error, set }) => {
@@ -30,6 +31,7 @@ const app = new Elysia()
   .use(authenticateFromLink)
   .use(fetchUserChats)
   .use(getProfile)
+  .use(sendFriendshipRequest)
   .use(cors())
 
 app.listen(3333, () => {

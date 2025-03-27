@@ -25,6 +25,7 @@ export const fetchUserChats = new Elysia()
     const chats = await db
       .select({
         friendId: users.id,
+        chatId: userChats.chatId,
         friendName: users.name,
         avatarUrl: users.avatarUrl,
       })

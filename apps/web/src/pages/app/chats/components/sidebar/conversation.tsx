@@ -5,6 +5,7 @@ interface ConversationProps {
     friendId: string
     friendName: string
     avatarUrl: string
+    chatId: string
   }
 }
 
