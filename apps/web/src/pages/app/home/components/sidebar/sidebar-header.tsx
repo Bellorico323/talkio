@@ -6,8 +6,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { MessageCirclePlus, Plus, UserPlus } from 'lucide-react'
+import { AddNewContactDialog } from '../add-contact-dialog'
+import { useState } from 'react'
 
 export function SidebarHeader() {
+  const [isAddNewContactDialogOpen, setIsAddNewContactDialogOpen] =
+    useState(false)
+
+  function handleAddNewContactDialog(value: boolean) {
+    setIsAddNewContactDialogOpen(value)
+  }
+
   return (
     <div className="border-b py-2 h-14 flex justify-between items-center pr-3">
       <strong className="text-lg">Chats</strong>
@@ -19,7 +28,11 @@ export function SidebarHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="bottom" align="end">
-          <DropdownMenuItem className="p-3">
+          <DropdownMenuItem
+            className="p-3"
+            textValue="test"
+            onSelect={() => handleAddNewContactDialog(true)}
+          >
             <UserPlus />
             Add contact
           </DropdownMenuItem>
@@ -29,6 +42,11 @@ export function SidebarHeader() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <AddNewContactDialog
+        open={isAddNewContactDialogOpen}
+        setOpen={handleAddNewContactDialog}
+      />
     </div>
   )
 }

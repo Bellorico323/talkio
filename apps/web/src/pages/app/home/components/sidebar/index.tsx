@@ -1,5 +1,5 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Conversation } from './conversation'
+import { ChatPreview } from './chat-preview'
 import { SidebarFooter } from './sidebar-footer'
 import { SidebarHeader } from './sidebar-header'
 import { useQuery } from '@tanstack/react-query'
@@ -23,14 +23,12 @@ export function Sidebar() {
     },
   })
 
-  console.log(chats)
-
   return (
     <aside className="flex flex-col border-r h-full gap-2">
       <SidebarHeader />
       <ScrollArea className="flex-1 max-h-[70vh] pr-4">
         {chats &&
-          chats.map((chat) => <Conversation key={chat.chatId} data={chat} />)}
+          chats.map((chat) => <ChatPreview key={chat.chatId} data={chat} />)}
       </ScrollArea>
       <SidebarFooter />
     </aside>

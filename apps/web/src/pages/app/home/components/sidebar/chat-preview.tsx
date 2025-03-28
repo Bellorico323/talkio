@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-interface ConversationProps {
+interface ChatPreviewProps {
   data: {
     friendId: string
     friendName: string
@@ -9,7 +9,7 @@ interface ConversationProps {
   }
 }
 
-export function Conversation({ data }: ConversationProps) {
+export function ChatPreview({ data }: ChatPreviewProps) {
   return (
     <li className="flex items-center gap-3 hover:bg-muted rounded-lg p-2 hover:cursor-pointer">
       <Avatar className="size-10">

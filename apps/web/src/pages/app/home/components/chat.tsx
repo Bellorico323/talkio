@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { SendHorizonal } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { AddNewContactDialog } from './add-contact-dialog'
 
 interface Message {
   userId: string
