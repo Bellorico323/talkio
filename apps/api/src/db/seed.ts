@@ -85,15 +85,15 @@ const [chat1, chat2, chat3] = await db
   .insert(chats)
   .values([
     {
-      name: faker.person.fullName(),
+      name: faker.internet.username(),
       type: 'private',
     },
     {
-      name: faker.person.fullName(),
+      name: faker.internet.username(),
       type: 'private',
     },
     {
-      name: faker.person.fullName(),
+      name: faker.internet.username(),
       type: 'private',
     },
   ])
@@ -129,6 +129,29 @@ await db.insert(userChats).values([
 ])
 
 console.log(chalk.yellow('✔ Created chats!'))
+
+/**
+ * Create users
+ */
+await db.insert(users).values([
+  {
+    name: 'username1',
+    email: faker.internet.email(),
+    avatarUrl: faker.image.avatarGitHub(),
+  },
+  {
+    name: 'username2',
+    email: faker.internet.email(),
+    avatarUrl: faker.image.avatarGitHub(),
+  },
+  {
+    name: 'username2',
+    email: faker.internet.email(),
+    avatarUrl: faker.image.avatarGitHub(),
+  },
+])
+
+console.log(chalk.yellow('✔ Created users!'))
 
 console.log(chalk.greenBright('✔ Database seeded!'))
 process.exit()

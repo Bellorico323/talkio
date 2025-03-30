@@ -1,31 +1,42 @@
 import Elysia from 'elysia'
 import { auth } from '../auth'
 import { db } from '@/db/connection'
-import { friendships } from '@/db/schema'
+import { friendships, users } from '@/db/schema'
+import { and, eq, sql } from 'drizzle-orm'
 
 export const sendFriendshipRequest = new Elysia()
   .use(auth)
   .post(
-    '/friendships/invite/:userId',
+    '/friendships/invite/:usernameWithCode',
     async ({ getCurrentUser, params, set }) => {
       const { userId } = await getCurrentUser()
 
-      const { userId: userToInviteId } = params
+      const { usernameWithCode } = params
 
-      if (userId === userToInviteId) {
+      const [username, code] = decodeURIComponent(usernameWithCode)
+        .toString()
+        .split('#')
+
+      if (!username || !code) {
         set.status = 400
-        return { error: 'You cannot send a friend request to yourself.' }
+        return { message: 'Invalid username or code.' }
       }
 
-      const userToInvite = await db.query.users.findFirst({
-        where(fields, { eq }) {
-          return eq(fields.id, userToInviteId)
-        },
-      })
+      const [userToInvite] = await db
+        .select()
+        .from(users)
+        .where(
+          and(sql`LEFT(${users.id}, 4) = ${code}`, eq(users.name, username)),
+        )
 
       if (!userToInvite) {
         set.status = 404
-        return { error: 'Resource not found' }
+        return { message: 'Resource not found' }
+      }
+
+      if (userId === userToInvite.id) {
+        set.status = 400
+        return { message: 'You cannot send a friend request to yourself.' }
       }
 
       const friendshipAlreadyExists = await db.query.friendships.findFirst({
@@ -39,7 +50,7 @@ export const sendFriendshipRequest = new Elysia()
 
       if (friendshipAlreadyExists) {
         set.status = 400
-        return { error: 'Friendship request already sent.' }
+        return { message: 'Friendship request already sent.' }
       }
 
       await db.insert(friendships).values({
