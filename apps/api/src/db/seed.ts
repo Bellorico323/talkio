@@ -35,9 +35,14 @@ console.log(chalk.yellow('✔ Created test user!'))
 /**
  * Create friends
  */
-const [friend1, friend2, friend3] = await db
+const [friend1, friend2, friend3, friend4] = await db
   .insert(users)
   .values([
+    {
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      avatarUrl: faker.image.avatarGitHub(),
+    },
     {
       name: faker.person.fullName(),
       email: faker.internet.email(),
@@ -56,7 +61,8 @@ const [friend1, friend2, friend3] = await db
   ])
   .returning()
 
-if (!friend1 || !friend2 || !friend3) throw new Error('Error creating friends.')
+if (!friend1 || !friend2 || !friend3 || !friend4)
+  throw new Error('Error creating friends.')
 
 await db.insert(friendships).values([
   {
@@ -72,6 +78,11 @@ await db.insert(friendships).values([
   {
     userId: user.id,
     friendId: friend3.id,
+    status: 'accepted',
+  },
+  {
+    userId: user.id,
+    friendId: friend4.id,
     status: 'accepted',
   },
 ])

@@ -4,6 +4,7 @@ import { SignIn } from './pages/auth/sign-in'
 import { SignUp } from './pages/auth/sign-up'
 import { MainPage } from './pages/app/home'
 import { NotFound } from './pages/404'
+import { AppLayout } from './pages/_layouts/app'
 
 export function Router() {
   return (
@@ -13,7 +14,9 @@ export function Router() {
         <Route path="/sign-up" element={<SignUp />} />
       </Route>
 
-      <Route path="/" element={<MainPage />} />
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<MainPage />} />
+      </Route>
 
       <Route path="*" element={<NotFound />} />
     </Routes>

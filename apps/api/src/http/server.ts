@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia'
-import { chat } from './routes/chat.js'
+import { connect } from './routes/connect.js'
 import { chatHistory } from './routes/chat-history.js'
 import cors from '@elysiajs/cors'
 import { sendAuthLink } from './routes/send-auth-link.js'
@@ -8,8 +8,11 @@ import { fetchUserChats } from './routes/fetch-user-chats.js'
 import { getProfile } from './routes/get-profile.js'
 import { sendFriendshipRequest } from './routes/send-friendship-request.js'
 import { getPendingInvites } from './routes/get-pending-invites.js'
+import { fetchFriends } from './routes/fetch-friends.js'
+import { auth } from './auth.js'
 
 const app = new Elysia()
+  .use(auth)
   .onError(({ code, error, set }) => {
     switch (code) {
       case 'VALIDATION': {
@@ -26,7 +29,7 @@ const app = new Elysia()
     }
   })
 
-  .use(chat)
+  .use(connect)
   .use(chatHistory)
   .use(sendAuthLink)
   .use(authenticateFromLink)
@@ -34,6 +37,7 @@ const app = new Elysia()
   .use(getProfile)
   .use(sendFriendshipRequest)
   .use(getPendingInvites)
+  .use(fetchFriends)
   .use(cors())
 
 app.listen(3333, () => {

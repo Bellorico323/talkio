@@ -33,12 +33,12 @@ export const sendAuthLink = new Elysia().post(
 
     const info = await mail.sendMail({
       from: {
-        name: 'Pizza Shop',
-        address: 'hi@pizzashop.com',
+        name: 'Talkio',
+        address: 'hi@talkio.com',
       },
       to: email,
-      subject: 'Authenticate to Pizza Shop',
-      text: `Use the followinng link to authenticate on Pizza shop: ${authLink.toString()}`,
+      subject: 'Authenticate to Talkio',
+      text: `Use the followinng link to authenticate on Talkio: ${authLink.toString()}`,
     })
 
     console.log(nodemailer.getTestMessageUrl(info))
