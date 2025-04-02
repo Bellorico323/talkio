@@ -1,8 +1,8 @@
 import { Elysia } from 'elysia'
-import { auth } from '../auth'
 import { db } from '@/db/connection'
 import { userChats, users } from '@/db/schema'
 import { and, eq, inArray, ne } from 'drizzle-orm'
+import { auth } from '@/http/auth'
 
 export const fetchUserChats = new Elysia()
   .use(auth)

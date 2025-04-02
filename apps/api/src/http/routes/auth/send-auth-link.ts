@@ -1,10 +1,10 @@
+import { db } from '@/db/connection'
+import { authLinks } from '@/db/schema'
+import { env } from '@/env'
+import { mail } from '@/lib/mail'
 import { createId } from '@paralleldrive/cuid2'
 import Elysia, { t } from 'elysia'
 import nodemailer from 'nodemailer'
-import { db } from '../../db/connection'
-import { authLinks } from '../../db/schema'
-import { env } from '../../env'
-import { mail } from '../../lib/mail'
 
 export const sendAuthLink = new Elysia().post(
   '/authenticate',

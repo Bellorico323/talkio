@@ -1,5 +1,5 @@
 import Elysia from 'elysia'
-import { auth } from '../auth'
+import { auth } from '@/http/auth'
 import { db } from '@/db/connection'
 
 export const getPendingInvites = new Elysia()

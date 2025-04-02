@@ -1,15 +1,10 @@
 import { Elysia } from 'elysia'
 import { connect } from './routes/connect.js'
-import { chatHistory } from './routes/chat-history.js'
 import cors from '@elysiajs/cors'
-import { sendAuthLink } from './routes/send-auth-link.js'
-import { authenticateFromLink } from './routes/authenticate-from-link.js'
-import { fetchUserChats } from './routes/fetch-user-chats.js'
-import { getProfile } from './routes/get-profile.js'
-import { sendFriendshipRequest } from './routes/send-friendship-request.js'
-import { getPendingInvites } from './routes/get-pending-invites.js'
-import { fetchFriends } from './routes/fetch-friends.js'
 import { auth } from './auth.js'
+import { authRoutes } from './routes/auth/_routes.js'
+import { chatRoutes } from './routes/chats/_routes.js'
+import { friendsRoutes } from './routes/friends/_routes.js'
 
 const app = new Elysia()
   .use(auth)
@@ -28,16 +23,10 @@ const app = new Elysia()
       }
     }
   })
-
+  .use(authRoutes)
+  .use(chatRoutes)
+  .use(friendsRoutes)
   .use(connect)
-  .use(chatHistory)
-  .use(sendAuthLink)
-  .use(authenticateFromLink)
-  .use(fetchUserChats)
-  .use(getProfile)
-  .use(sendFriendshipRequest)
-  .use(getPendingInvites)
-  .use(fetchFriends)
   .use(cors())
 
 app.listen(3333, () => {

@@ -1,5 +1,5 @@
 import Elysia, { t } from 'elysia'
-import { auth } from '../auth'
+import { auth } from '@/http/auth'
 import { db } from '@/db/connection'
 import { friendships, userChats, users } from '@/db/schema'
 import { and, asc, eq, inArray } from 'drizzle-orm'

@@ -1,9 +1,9 @@
+import { db } from '@/db/connection'
+import { authLinks } from '@/db/schema'
+import { auth } from '@/http/auth'
 import dayjs from 'dayjs'
 import { eq } from 'drizzle-orm'
 import Elysia, { t } from 'elysia'
-import { db } from '../../db/connection'
-import { authLinks } from '../../db/schema'
-import { auth } from '../auth'
 
 export const authenticateFromLink = new Elysia().use(auth).get(
   '/auth-links/authenticate',
