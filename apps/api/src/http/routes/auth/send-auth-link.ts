@@ -16,7 +16,8 @@ export const sendAuthLink = new Elysia().post(
     })
 
     if (!userFromEmail) {
-      throw new Error('User not found.')
+      set.status = 'Not Found'
+      return { message: 'User not found.' }
     }
 
     const authLinkCode = createId()

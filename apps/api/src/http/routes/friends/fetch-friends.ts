@@ -2,20 +2,21 @@ import Elysia, { t } from 'elysia'
 import { auth } from '@/http/auth'
 import { db } from '@/db/connection'
 import { friendships, userChats, users } from '@/db/schema'
-import { and, asc, eq, inArray } from 'drizzle-orm'
+import { and, asc, eq, ilike, inArray } from 'drizzle-orm'
 
 export const fetchFriends = new Elysia().use(auth).get(
   '/friends',
-  async ({ getCurrentUser }) => {
+  async ({ getCurrentUser, query }) => {
     const { userId } = await getCurrentUser()
+    const { friendName } = query
 
     const friends = await db
       .select({
         friendName: users.name,
         chatId: userChats.chatId,
+        avatarUrl: users.avatarUrl,
       })
       .from(friendships)
-      .where(eq(friendships.userId, userId))
       .innerJoin(users, eq(users.id, friendships.friendId))
       .leftJoin(
         userChats,
@@ -30,6 +31,12 @@ export const fetchFriends = new Elysia().use(auth).get(
           ),
         ),
       )
+      .where(
+        and(
+          eq(friendships.userId, userId),
+          friendName ? ilike(users.name, `%${friendName}%`) : undefined,
+        ),
+      )
       .orderBy(asc(users.name))
 
     return {
@@ -38,7 +45,7 @@ export const fetchFriends = new Elysia().use(auth).get(
   },
   {
     query: t.Object({
-      search: t.Optional(t.String()),
+      friendName: t.Optional(t.String()),
     }),
   },
 )

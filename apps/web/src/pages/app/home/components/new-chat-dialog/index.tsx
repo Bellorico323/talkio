@@ -16,6 +16,8 @@ import { useQuery } from '@tanstack/react-query'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { useEffect } from 'react'
+import { fetchFriends } from '@/http/fetch-friends'
+import { useGroupedFriends } from '@/hooks/use-grouped-friends'
 
 interface NewChatDialogProps {
   open: boolean
@@ -41,19 +43,15 @@ export function NewChatDialog({ open, setOpen }: NewChatDialogProps) {
   const searchQuery = watch('search')
   const debouncedSearch = useDebounce(searchQuery)
 
-  const {
-    data: chats,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['chats', debouncedSearch],
-    queryFn: () => {
-      console.log(debouncedSearch) // TODO: implement query
-      return []
+  const { data } = useQuery({
+    queryKey: ['friends', debouncedSearch],
+    queryFn: async () => {
+      return await fetchFriends({ friendName: debouncedSearch })
     },
-    enabled: !!debouncedSearch,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
+
+  const groupedFriends = useGroupedFriends(data?.friends || [])
 
   useEffect(() => {
     return () => reset()
@@ -94,27 +92,31 @@ export function NewChatDialog({ open, setOpen }: NewChatDialogProps) {
           </div>
 
           <ScrollArea className="max-h-[14em]">
-            <div className="flex flex-col gap-2.5 pr-3">
-              <p>A</p>
+            {data?.friends &&
+              Object.keys(groupedFriends)
+                .sort()
+                .map((letter) => (
+                  <div className="flex flex-col gap-2.5 pr-3 mb-3" key={letter}>
+                    <p>{letter}</p>
 
-              <div className="flex flex-col  bg-message rounded">
-                {Array.from({ length: 10 }).map((item, idx) => (
-                  <div
-                    className="border-b border-accent py-1.5 flex gap-2.5 items-center last:border-none hover:bg-input/30 px-3"
-                    key={idx}
-                  >
-                    <Avatar className="size-8">
-                      <AvatarImage
-                        src={'https://github.com/Bellorico323.png'}
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
+                    <div className="flex flex-col  bg-message rounded">
+                      {groupedFriends[letter] &&
+                        groupedFriends[letter].map((item) => (
+                          <div
+                            className="border-b border-accent py-1.5 flex gap-2.5 items-center last:border-none hover:bg-input/30 px-3"
+                            key={item.chatId}
+                          >
+                            <Avatar className="size-8">
+                              <AvatarImage src={item.avatarUrl} />
+                              <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
 
-                    <p>Ana Julia</p>
+                            <p>{item.friendName}</p>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 ))}
-              </div>
-            </div>
           </ScrollArea>
         </div>
       </DialogContent>

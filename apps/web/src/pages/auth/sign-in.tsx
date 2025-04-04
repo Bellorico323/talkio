@@ -8,13 +8,13 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { MessageCircleCodeIcon } from 'lucide-react'
+import { Loader2, MessageCircleCodeIcon } from 'lucide-react'
 import { Link } from 'react-router'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '@/lib/api-client'
+import { signIn } from '@/http/sign-in'
 
 const signInSchema = z.object({
   email: z.string().email({ message: 'Please provide a valid e-mail.' }),
@@ -27,23 +27,25 @@ export function SignIn() {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
   })
 
-  const { mutateAsync: signIn } = useMutation({
-    mutationFn: ({ email }: { email: string }) => {
-      return api.post('authenticate', {
-        json: {
-          email,
-        },
-      })
+  const { mutateAsync: signInMutation, data } = useMutation({
+    mutationFn: async ({ email }: { email: string }) => {
+      return await signIn({ email })
     },
   })
 
   async function handleSubmitEmail({ email }: SignInSchema) {
-    await signIn({ email })
+    await signInMutation({ email })
+
+    if (data && data.message) {
+      setError('email', { message: data.message, type: 'custom' })
+      return
+    }
     reset()
   }
 
@@ -69,7 +71,7 @@ export function SignIn() {
             )}
           </div>
           <Button className="w-full" disabled={isSubmitting}>
-            Sign in
+            {isSubmitting ? <Loader2 /> : 'Sign in'}
           </Button>
 
           <span>
