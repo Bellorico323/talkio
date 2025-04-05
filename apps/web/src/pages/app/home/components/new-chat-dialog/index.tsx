@@ -59,7 +59,7 @@ export function NewChatDialog({ open, setOpen }: NewChatDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="flex flex-col">
         <DialogHeader>
           <DialogTitle>New Chat</DialogTitle>
           <DialogDescription>Create new chat</DialogDescription>
@@ -86,38 +86,49 @@ export function NewChatDialog({ open, setOpen }: NewChatDialogProps) {
             </form>
           </Form>
 
-          <div className="flex flex-col gap-2.5">
-            <p>Recent chats</p>
-            <RecentChats />
-          </div>
+          {searchQuery ? null : (
+            <div className="flex flex-col gap-2.5">
+              <p>Recent chats</p>
+              <RecentChats />
+            </div>
+          )}
 
-          <ScrollArea className="max-h-[14em]">
-            {data?.friends &&
-              Object.keys(groupedFriends)
-                .sort()
-                .map((letter) => (
-                  <div className="flex flex-col gap-2.5 pr-3 mb-3" key={letter}>
-                    <p>{letter}</p>
+          {data?.friends && data?.friends.length > 0 ? (
+            <ScrollArea className="h-[14rem]">
+              {data?.friends &&
+                Object.keys(groupedFriends)
+                  .sort()
+                  .map((letter) => (
+                    <div
+                      className="flex flex-col gap-2.5 pr-3 mb-3"
+                      key={letter}
+                    >
+                      <p>{letter}</p>
 
-                    <div className="flex flex-col  bg-message rounded">
-                      {groupedFriends[letter] &&
-                        groupedFriends[letter].map((item) => (
-                          <div
-                            className="border-b border-accent py-1.5 flex gap-2.5 items-center last:border-none hover:bg-input/30 px-3"
-                            key={item.chatId}
-                          >
-                            <Avatar className="size-8">
-                              <AvatarImage src={item.avatarUrl} />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
+                      <div className="flex flex-col  bg-message rounded">
+                        {groupedFriends[letter] &&
+                          groupedFriends[letter].map((item) => (
+                            <div
+                              className="border-b border-accent py-1.5 flex gap-2.5 items-center last:border-none hover:bg-input/30 px-3 hover:cursor-pointer"
+                              key={item.chatId}
+                            >
+                              <Avatar className="size-8">
+                                <AvatarImage src={item.avatarUrl} />
+                                <AvatarFallback>CN</AvatarFallback>
+                              </Avatar>
 
-                            <p>{item.friendName}</p>
-                          </div>
-                        ))}
+                              <p>{item.friendName}</p>
+                            </div>
+                          ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-          </ScrollArea>
+                  ))}
+            </ScrollArea>
+          ) : (
+            <div className="flex items-center justify-center">
+              <p className="text-lg font-medium">No results</p>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

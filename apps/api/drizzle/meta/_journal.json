@@ -43,6 +43,13 @@
       "when": 1742954576667,
       "tag": "0005_next_puppet_master",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1743819644830,
+      "tag": "0006_last_ben_parker",
+      "breakpoints": true
     }
   ]
 }

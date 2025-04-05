@@ -110,7 +110,7 @@ const [chat1, chat2, chat3] = await db
   ])
   .returning()
 
-if (!chat1 || !chat2 || !chat3) throw new Error('Error creating friends.')
+if (!chat1 || !chat2 || !chat3) throw new Error('Error creating chats.')
 
 await db.insert(userChats).values([
   {
@@ -142,7 +142,7 @@ await db.insert(userChats).values([
 console.log(chalk.yellow('✔ Created chats!'))
 
 /**
- * Create users
+ * Create users (to test invites)
  */
 await db.insert(users).values([
   {
@@ -163,6 +163,51 @@ await db.insert(users).values([
 ])
 
 console.log(chalk.yellow('✔ Created users!'))
+
+/**
+ * Create messages
+ */
+await db.insert(messages).values([
+  {
+    userId: user.id,
+    chatId: chat1.id,
+    content: 'E aí, como você está?',
+    createdAt: faker.date.recent({ days: 3 }),
+  },
+  {
+    userId: friend1.id,
+    chatId: chat1.id,
+    content: 'Tudo certo! E você?',
+    createdAt: faker.date.recent({ days: 2 }),
+  },
+
+  {
+    userId: friend2.id,
+    chatId: chat2.id,
+    content: 'Terminou o projeto?',
+    createdAt: faker.date.recent({ days: 5 }),
+  },
+  {
+    userId: user.id,
+    chatId: chat2.id,
+    content: 'Sim, ficou pronto ontem!',
+    createdAt: faker.date.recent({ days: 4 }),
+  },
+  {
+    userId: user.id,
+    chatId: chat3.id,
+    content: 'Vamos jogar mais tarde?',
+    createdAt: faker.date.recent({ days: 1 }),
+  },
+  {
+    userId: friend3.id,
+    chatId: chat3.id,
+    content: 'Bora! Às 20h tá bom?',
+    createdAt: faker.date.recent({ days: 1 }),
+  },
+])
+
+console.log(chalk.yellow('✔ Created messages!'))
 
 console.log(chalk.greenBright('✔ Database seeded!'))
 process.exit()

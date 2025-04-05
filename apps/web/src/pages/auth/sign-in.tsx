@@ -71,7 +71,7 @@ export function SignIn() {
             )}
           </div>
           <Button className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? <Loader2 /> : 'Sign in'}
+            {isSubmitting ? <Loader2 className="animate-spin" /> : 'Sign in'}
           </Button>
 
           <span>

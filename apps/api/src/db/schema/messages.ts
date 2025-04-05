@@ -14,6 +14,7 @@ export const messages = pgTable('messages', {
   chatId: text('chat_id').references(() => chats.id, {
     onDelete: 'no action',
   }),
+  content: text('content').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').$onUpdate(() => new Date()),
 })
