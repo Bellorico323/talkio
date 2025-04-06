@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useNavigate } from 'react-router'
 
 interface ChatPreviewProps {
   data: {
@@ -10,8 +11,13 @@ interface ChatPreviewProps {
 }
 
 export function ChatPreview({ data }: ChatPreviewProps) {
+  const navigate = useNavigate()
+
   return (
-    <li className="flex items-center gap-3 hover:bg-muted rounded-lg p-2 hover:cursor-pointer">
+    <li
+      className="flex items-center gap-3 hover:bg-muted rounded-lg p-2 hover:cursor-pointer"
+      onClick={() => navigate(`/${data.chatId}/${data.friendId}`)}
+    >
       <Avatar className="size-10">
         <AvatarImage src={data.avatarUrl} />
         <AvatarFallback>CN</AvatarFallback>

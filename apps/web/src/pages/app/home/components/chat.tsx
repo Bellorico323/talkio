@@ -4,64 +4,66 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { SendHorizonal } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { AddNewContactDialog } from './add-contact-dialog'
+import { useAuth } from '@/hooks/use-auth'
+import { useParams } from 'react-router'
 
 interface Message {
-  userId: string
+  id: string
+  userId: string | null
+  chatId: string | null
   content: string
-  messageId: string
+  createdAt: Date
+  updatedAt: Date | null
 }
 
-export function Chat() {
+export function Chat({ messages: initialMessages }: { messages: Message[] }) {
+  const { chatId, friendId } = useParams<{ chatId: string; friendId: string }>()
+
+  const { user } = useAuth()
+
   const connection = useRef<null | WebSocket>(null)
   const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>(initialMessages)
 
-  // useEffect(() => {
-  //   const socket = new WebSocket('http://localhost:3333/chat')
+  useEffect(() => {
+    if (!user) return
 
-  //   connection.current = socket
+    setMessages(initialMessages)
 
-  //   const handleOpen = () => {
-  //     socket.send('Connection established')
-  //   }
+    const ws = new WebSocket('ws://localhost:3333/connect')
 
-  //   const handleMessage = (event: MessageEvent) => {
-  //     const message = JSON.parse(event.data)
+    ws.onopen = () => {
+      console.log('WebSocket conectado')
+      connection.current = ws
+    }
 
-  //     console.log('Mensagem recebida do servidor:', message)
-  //     if (message.type !== 'validation') {
-  //       setMessages((prevMessages) => [...prevMessages, JSON.parse(event.data)])
-  //     }
-  //   }
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data)
 
-  //   socket.addEventListener('open', handleOpen)
-  //   socket.addEventListener('message', handleMessage)
+      console.log(data)
 
-  //   return () => {
-  //     if (connection.current instanceof WebSocket) {
-  //       connection.current.removeEventListener('open', handleOpen)
-  //       connection.current.removeEventListener('message', handleMessage)
-  //       connection.current.close()
-  //       connection.current = null
-  //     }
-  //   }
-  // }, [])
+      setMessages((prev) => [...prev, data])
+    }
+
+    ws.onclose = () => {}
+  }, [user, initialMessages])
 
   function sendMessage() {
     if (
       connection.current &&
-      connection.current.readyState === WebSocket.OPEN
+      connection.current.readyState === WebSocket.OPEN &&
+      message.trim()
     ) {
       connection.current.send(
         JSON.stringify({
-          userId: '1',
+          friendId,
+          chatId,
           content: message,
         }),
       )
       setMessage('')
     } else {
-      console.warn('WebSocket não está conectado.')
+      console.warn('WebSocket não está conectado ou mensagem vazia.')
     }
   }
 
@@ -70,10 +72,10 @@ export function Chat() {
       <CardContent className="flex flex-col gap-2 flex-1">
         {messages.map((message) => (
           <div
-            key={message.messageId}
+            key={message.id}
             className={cn(
               'w-max bg-message p-3 rounded-lg flex max-w-[400px]',
-              message.userId === '1' ? 'self-end' : 'self-start',
+              message.userId === user?.id ? 'self-end' : 'self-start',
             )}
           >
             <span>{message.content}</span>

@@ -16,6 +16,7 @@ export function Router() {
 
       <Route element={<AppLayout />}>
         <Route path="/" element={<MainPage />} />
+        <Route path="/:chatId/:friendId" element={<MainPage />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 type Friend = {
+  friendId: string
   friendName: string
   chatId: string | null
   avatarUrl: string

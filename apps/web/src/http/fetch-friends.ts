@@ -6,6 +6,7 @@ interface FetchFriendsQuery {
 
 interface FetchFriendsResponse {
   friends: {
+    friendId: string
     friendName: string
     chatId: string | null
     avatarUrl: string

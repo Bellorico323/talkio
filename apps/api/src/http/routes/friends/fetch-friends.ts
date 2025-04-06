@@ -12,6 +12,7 @@ export const fetchFriends = new Elysia().use(auth).get(
 
     const friends = await db
       .select({
+        friendId: users.id,
         friendName: users.name,
         chatId: userChats.chatId,
         avatarUrl: users.avatarUrl,

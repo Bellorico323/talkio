@@ -18,6 +18,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { useEffect } from 'react'
 import { fetchFriends } from '@/http/fetch-friends'
 import { useGroupedFriends } from '@/hooks/use-grouped-friends'
+import { useNavigate } from 'react-router'
 
 interface NewChatDialogProps {
   open: boolean
@@ -31,6 +32,8 @@ const searchFormSchema = z.object({
 type SearchFormSchema = z.infer<typeof searchFormSchema>
 
 export function NewChatDialog({ open, setOpen }: NewChatDialogProps) {
+  const navigate = useNavigate()
+
   const form = useForm<SearchFormSchema>({
     resolver: zodResolver(searchFormSchema),
     defaultValues: {
@@ -56,6 +59,11 @@ export function NewChatDialog({ open, setOpen }: NewChatDialogProps) {
   useEffect(() => {
     return () => reset()
   }, [open, reset])
+
+  function selectFriend(params: { chatId: string | null; friendId: string }) {
+    navigate(`/${params.chatId ?? 'new-chat'}/${params.friendId}`)
+    setOpen(false)
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -110,7 +118,13 @@ export function NewChatDialog({ open, setOpen }: NewChatDialogProps) {
                           groupedFriends[letter].map((item) => (
                             <div
                               className="border-b border-accent py-1.5 flex gap-2.5 items-center last:border-none hover:bg-input/30 px-3 hover:cursor-pointer"
-                              key={item.chatId}
+                              key={item.friendId}
+                              onClick={() =>
+                                selectFriend({
+                                  chatId: item.chatId,
+                                  friendId: item.friendId,
+                                })
+                              }
                             >
                               <Avatar className="size-8">
                                 <AvatarImage src={item.avatarUrl} />
