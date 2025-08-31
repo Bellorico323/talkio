@@ -1,7 +1,11 @@
 {
   "extends": "@talkio/typescript-config/base.json",
-  "compilerOptions": {},
-  "include": [
-    "src"
-  ],
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
 }

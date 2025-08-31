@@ -1,5 +1,5 @@
 {
-  "extends": "@talkio/typescript-config/base.json",
+  "extends": "@talkio/typescript-config/nextjs.json",
   "compilerOptions": {
     "jsx": "react-jsx",
   },
