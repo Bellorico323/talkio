@@ -38,6 +38,9 @@ importers:
       tsx:
         specifier: ^4.20.5
         version: 4.20.5
+      zod:
+        specifier: ^4.1.5
+        version: 4.1.5
     devDependencies:
       '@talkio/eslint-config':
         specifier: workspace:*
