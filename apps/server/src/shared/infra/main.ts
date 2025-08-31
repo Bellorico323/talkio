@@ -1,16 +1,26 @@
 import { chatModule } from '@/modules/chat/infra/chat.module'
+import { friendshipModule } from '@/modules/friendships/infra/friendships.module'
 import { authModule } from '@/modules/identity/infra/lib/auth-handler'
 import fastifyCors from '@fastify/cors'
 import fastify from 'fastify'
+import { AppModule } from './contracts/app-module'
 
 async function bootstrap() {
-  /** Event handlers */
-  chatModule.execute()
-
   const app = fastify()
 
-  app.register(authModule)
+  const modules: AppModule[] = [friendshipModule, chatModule]
 
+  for (const module of modules) {
+    if (module.execute) {
+      await module.execute()
+    }
+
+    if (module.routes) {
+      await module.routes(app)
+    }
+  }
+
+  app.register(authModule)
   app.register(fastifyCors, {
     origin: process.env.CLIENT_ORIGIN || 'http://localhost:5713',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
