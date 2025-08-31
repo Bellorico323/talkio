@@ -1,8 +1,12 @@
+import { chatModule } from '@/modules/chat/infra/chat.module'
 import { authModule } from '@/modules/identity/infra/lib/auth-handler'
 import fastifyCors from '@fastify/cors'
 import fastify from 'fastify'
 
 async function bootstrap() {
+  /** Event handlers */
+  chatModule.execute()
+
   const app = fastify()
 
   app.register(authModule)
