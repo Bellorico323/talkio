@@ -1,93 +1,77 @@
 import { AggregateRoot } from '../entities/aggregate-root'
 import { UniqueEntityID } from '../entities/unique-entity-id'
+import { EventPublisher } from './event-publisher'
+import { DomainEventCallback, EventSubscriber } from './event-subscriber'
 import { DomainEvent } from './domain-event'
 
-type DomainEventCallback = (event: any) => void
+// Classe "morta" para segurança caso a inicialização não ocorra
+class NullImplementation implements EventPublisher, EventSubscriber {
+  subscribe() {}
+  publish() {}
+}
 
 export class DomainEvents {
-  private static handlersMap: Record<string, DomainEventCallback[]> = {}
+  // Mantemos a lógica de "Unit of Work" aqui
   private static markedAggregates: AggregateRoot<unknown>[] = []
 
-  public static shouldRun = true
+  // Guardamos as instâncias das implementações concretas
+  private static publisher: EventPublisher = new NullImplementation()
+  private static subscriber: EventSubscriber = new NullImplementation()
 
-  public static markAggregateForDispatch(aggregate: AggregateRoot<unknown>) {
+  /**
+   * Método de inicialização. Deve ser chamado no entrypoint da aplicação.
+   */
+  public static initialize(
+    publisher: EventPublisher,
+    subscriber: EventSubscriber
+  ): void {
+    this.publisher = publisher
+    this.subscriber = subscriber
+  }
+
+  public static markAggregateForDispatch(
+    aggregate: AggregateRoot<unknown>
+  ): void {
     const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id)
-
     if (!aggregateFound) {
       this.markedAggregates.push(aggregate)
     }
   }
 
-  private static dispatchAggregateEvents(aggregate: AggregateRoot<unknown>) {
-    aggregate.domainEvents.forEach((event: DomainEvent) => this.dispatch(event))
+  public static dispatchEventsForAggregate(id: UniqueEntityID): void {
+    const aggregate = this.findMarkedAggregateByID(id)
+    if (aggregate) {
+      // 1. Dispara os eventos do agregado
+      aggregate.domainEvents.forEach((event) => this.publisher.publish(event))
+      // 2. Limpa os eventos do agregado
+      aggregate.clearEvents()
+      // 3. Remove o agregado da lista
+      this.removeAggregateFromMarkedDispatchList(aggregate)
+    }
   }
 
-  private static removeAggregateFromMarkedDispatchList(
-    aggregate: AggregateRoot<unknown>
-  ) {
-    const index = this.markedAggregates.findIndex((a) => a.equals(aggregate))
-
-    this.markedAggregates.splice(index, 1)
+  /**
+   * Renomeado de 'register' para 'subscribe'.
+   * Delega a inscrição para a implementação concreta.
+   */
+  public static subscribe<T extends DomainEvent>(
+    eventName: string,
+    callback: DomainEventCallback<T>
+  ): void {
+    this.subscriber.subscribe(eventName, callback)
   }
 
+  // Métodos privados para gerenciar 'markedAggregates' continuam os mesmos...
   private static findMarkedAggregateByID(
     id: UniqueEntityID
   ): AggregateRoot<unknown> | undefined {
     return this.markedAggregates.find((aggregate) => aggregate.id.equals(id))
   }
 
-  public static dispatchEventsForAggregate(id: UniqueEntityID) {
-    const aggregate = this.findMarkedAggregateByID(id)
-
-    if (aggregate) {
-      this.dispatchAggregateEvents(aggregate)
-      aggregate.clearEvents()
-      this.removeAggregateFromMarkedDispatchList(aggregate)
-    }
-  }
-
-  public static register(
-    callback: DomainEventCallback,
-    eventClassName: string
-  ) {
-    const wasEventRegisteredBefore = eventClassName in this.handlersMap
-
-    if (!wasEventRegisteredBefore) {
-      this.handlersMap[eventClassName] = []
-    }
-
-    if (this.handlersMap[eventClassName]) {
-      this.handlersMap[eventClassName].push(callback)
-    }
-  }
-
-  public static clearHandlers() {
-    this.handlersMap = {}
-  }
-
-  public static clearMarkedAggregates() {
-    this.markedAggregates = []
-  }
-
-  private static dispatch(event: DomainEvent) {
-    const eventClassName: string = event.constructor.name
-
-    const isEventRegistered = eventClassName in this.handlersMap
-
-    if (!this.shouldRun) {
-      return
-    }
-
-    if (isEventRegistered) {
-      const handlers = this.handlersMap[eventClassName]
-
-      if (!handlers) {
-        return
-      }
-
-      for (const handler of handlers) {
-        handler(event)
-      }
-    }
+  private static removeAggregateFromMarkedDispatchList(
+    aggregate: AggregateRoot<unknown>
+  ): void {
+    const index = this.markedAggregates.findIndex((a) => a.equals(aggregate))
+    this.markedAggregates.splice(index, 1)
   }
 }

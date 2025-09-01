@@ -9,15 +9,15 @@ export class OnUserCreated implements EventHandler {
   }
 
   setupSubscriptions(): void {
-    DomainEvents.register(
-      this.createNewChatUser.bind(this),
-      UserCreatedEvent.name
-    )
+    DomainEvents.subscribe(UserCreatedEvent.name, this.handle.bind(this))
   }
 
-  private async createNewChatUser({ user }: UserCreatedEvent) {
+  private async handle({ user }: UserCreatedEvent) {
     await this.createChatUserUseCase.execute({
       userId: user.id.toString(),
     })
+    console.log(
+      `[Event Handled] Chat user created for user ID: ${user.id.toString()}`
+    )
   }
 }

@@ -1,9 +1,9 @@
 import { FriendShip } from '@/modules/friendships/domain/entities/friendship'
 import { FriendshipsRepository } from '../../../application/repositories/friendships-repository'
-import { db } from '@/shared/infra/database/client'
+import { db } from '@/infra/database/client'
 import { and, eq, or } from 'drizzle-orm'
 import { FriendshipMapper } from '../../mappers/friendship-mapper'
-import { friendships } from '@/shared/infra/database/schema/friendships'
+import { friendships } from '@/infra/database/schema/friendships'
 
 export class DrizzleFriendshipsRepository implements FriendshipsRepository {
   async findById(friendshipId: string): Promise<FriendShip | null> {

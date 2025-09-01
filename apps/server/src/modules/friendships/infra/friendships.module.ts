@@ -1,4 +1,4 @@
-import { AppModule } from '@/shared/infra/contracts/app-module'
+import { AppModule } from '@/infra/contracts/app-module'
 import { FastifyInstance } from 'fastify'
 import { sendFriendshipRequestController } from './controllers/send-friendship-request.controller'
 
