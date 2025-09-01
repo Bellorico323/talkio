@@ -15,14 +15,16 @@ type DrizzleFriendship = {
 
 export class FriendshipMapper {
   public static toDomain(raw: DrizzleFriendship): FriendShip {
-    const props: FriendshipProps = {
-      requesterId: new UniqueEntityID(raw.requesterId),
-      addresseeId: new UniqueEntityID(raw.addresseeId),
-      status: raw.status,
-      createdAt: raw.createdAt,
-      acceptedAt: raw.acceptedAt ?? undefined,
-    }
-    return FriendShip.create(props, new UniqueEntityID(raw.id))
+    return FriendShip.create(
+      {
+        requesterId: new UniqueEntityID(raw.requesterId),
+        addresseeId: new UniqueEntityID(raw.addresseeId),
+        status: raw.status,
+        createdAt: raw.createdAt,
+        acceptedAt: raw.acceptedAt ?? undefined,
+      },
+      new UniqueEntityID(raw.id)
+    )
   }
 
   public static toPersistence(friendship: FriendShip) {

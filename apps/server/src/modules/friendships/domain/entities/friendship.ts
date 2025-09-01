@@ -45,11 +45,14 @@ export class FriendShip extends AggregateRoot<FriendshipProps> {
     props: Optional<FriendshipProps, 'status' | 'createdAt'>,
     id?: UniqueEntityID
   ) {
-    const friendship = new FriendShip({
-      ...props,
-      status: 'pending',
-      createdAt: props.createdAt ?? new Date(),
-    })
+    const friendship = new FriendShip(
+      {
+        ...props,
+        status: 'pending',
+        createdAt: props.createdAt ?? new Date(),
+      },
+      id
+    )
 
     return friendship
   }
