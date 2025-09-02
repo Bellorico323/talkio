@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { ChatUser } from '../../domain/entities/chat-user'
 import { InMemoryChatUsersRepository } from 'test/repositories/chat/in-memory-chat-users-repository'
-import { CreateChatUserUseCase } from './create-user'
+import { ChatUser } from '@/modules/chat/domain/entities/chat-user'
+import { CreateChatUserUseCase } from '../create-user'
 
 let chatUsersRepository: InMemoryChatUsersRepository
 let sut: CreateChatUserUseCase

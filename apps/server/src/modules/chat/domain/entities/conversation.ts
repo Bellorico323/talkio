@@ -2,6 +2,7 @@ import { AggregateRoot } from '@/shared/domain/entities/aggregate-root'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { Optional } from '@/shared/domain/types/optional'
 import { Message } from './message'
+import { NotParticipantError } from '../../application/use-cases/errors/not-participant-error'
 
 export interface ConversationProps {
   title?: string
@@ -46,7 +47,7 @@ export class Conversation extends AggregateRoot<ConversationProps> {
     )
 
     if (!isParticipant) {
-      throw new Error('Sender is not a participant of this conversation.')
+      throw new NotParticipantError()
     }
 
     const message = Message.create({

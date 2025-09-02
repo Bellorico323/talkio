@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { Conversation } from '../../domain/entities/conversation'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { ResourceNotFoundError } from '@/shared/domain/errors/resource-not-found-error'
 import { InMemoryConversationsRepository } from 'test/repositories/chat/in-memory-conversations-repository'
-import { SendDirectMessageUseCase } from './send-direct-message'
 import { makeConversation } from 'test/factories/make-conversation'
+import { Conversation } from '@/modules/chat/domain/entities/conversation'
+import { SendDirectMessageUseCase } from '../send-direct-message'
 
 let conversationsRepository: InMemoryConversationsRepository
 let sut: SendDirectMessageUseCase // System Under Test

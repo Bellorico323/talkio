@@ -1,6 +1,6 @@
 import { InMemoryConversationsRepository } from 'test/repositories/chat/in-memory-conversations-repository'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { CreateGroupUseCase } from './create-group'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { CreateGroupUseCase } from '../create-group'
 import { ResourceNotFoundError } from '@/shared/domain/errors/resource-not-found-error'
 import { InMemoryChatUsersRepository } from 'test/repositories/chat/in-memory-chat-users-repository'
 import { makeChatUser } from 'test/factories/make-chat-user'

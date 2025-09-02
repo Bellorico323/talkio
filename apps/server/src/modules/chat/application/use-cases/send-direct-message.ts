@@ -1,5 +1,4 @@
 import { Either, left, right } from '@/shared/domain/either'
-import { ChatUsersRepository } from '../repositories/chat-users-repository'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { Conversation } from '../../domain/entities/conversation'
 import { ConversationsRepository } from '../repositories/conversations-repository'
