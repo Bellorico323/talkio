@@ -11,7 +11,7 @@
     "pretest:e2e": "dotenv -e .env.test drizzle-kit migrate",
     "test": "vitest",
     "test:unit": "vitest run --project unit",
-    "test:e2e": "vitest run **/*.e2e-spec.ts",
+    "test:e2e": "vitest run --project e2e",
     "coverage": "vitest run --coverage"
   },
   "keywords": [],

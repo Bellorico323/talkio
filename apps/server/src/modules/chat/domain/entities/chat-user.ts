@@ -10,6 +10,18 @@ export interface ChatUserProps {
 export type ChatUserStatus = 'offline' | 'online'
 
 export class ChatUser extends Entity<ChatUserProps> {
+  get userId() {
+    return this.props.userId
+  }
+
+  get status() {
+    return this.props.status
+  }
+
+  get bio() {
+    return this.props.bio
+  }
+
   static create(props: ChatUserProps, id?: UniqueEntityID) {
     return new ChatUser(
       {
