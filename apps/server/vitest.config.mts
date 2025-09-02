@@ -11,10 +11,29 @@ export default defineConfig({
       include: ['./src/**/*.ts'],
       exclude: ['**/*.test.ts', './src/tests/**'],
     },
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+    projects: [
+      {
+        test: {
+          name: 'unit',
+          include: ['**/*.spec.ts'],
+        },
+        resolve: {
+          alias: {
+            '@': path.resolve(__dirname, './src'),
+          },
+        },
+      },
+      {
+        test: {
+          name: 'e2e',
+          include: ['**/*.e2e-spec.ts'],
+        },
+        resolve: {
+          alias: {
+            '@': path.resolve(__dirname, './src'),
+          },
+        },
+      },
+    ],
   },
 })
