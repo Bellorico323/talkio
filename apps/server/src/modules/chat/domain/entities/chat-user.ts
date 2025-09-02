@@ -3,14 +3,17 @@ import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 
 export interface ChatUserProps {
   userId: UniqueEntityID
-  status?: string
+  status?: ChatUserStatus
   bio?: string
 }
+
+export type ChatUserStatus = 'offline' | 'online'
 
 export class ChatUser extends Entity<ChatUserProps> {
   static create(props: ChatUserProps, id?: UniqueEntityID) {
     return new ChatUser(
       {
+        status: props.status ?? 'offline',
         ...props,
       },
       id

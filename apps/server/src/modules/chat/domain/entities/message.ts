@@ -10,6 +10,19 @@ export interface MessageProps {
 }
 
 export class Message extends Entity<MessageProps> {
+  get conversationId() {
+    return this.props.conversationId
+  }
+  get senderId() {
+    return this.props.senderId
+  }
+  get content() {
+    return this.props.content
+  }
+  get createdAt() {
+    return this.props.createdAt
+  }
+
   static create(
     props: Optional<MessageProps, 'createdAt'>,
     id?: UniqueEntityID
