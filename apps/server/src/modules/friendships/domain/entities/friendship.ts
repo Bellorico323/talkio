@@ -1,6 +1,7 @@
 import { AggregateRoot } from '@/shared/domain/entities/aggregate-root'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { Optional } from '@/shared/domain/types/optional'
+import { SentFriendshipRequestEvent } from './sent-friendship-request-event'
 
 export type FriendshipStatus = 'pending' | 'accepted'
 
@@ -53,6 +54,8 @@ export class FriendShip extends AggregateRoot<FriendshipProps> {
       },
       id
     )
+
+    friendship.addDomainEvent(new SentFriendshipRequestEvent(friendship))
 
     return friendship
   }

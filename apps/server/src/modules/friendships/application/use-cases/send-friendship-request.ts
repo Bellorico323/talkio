@@ -4,6 +4,7 @@ import { FriendShip } from '../../domain/entities/friendship'
 import { FriendshipToYourselfError } from './errors/friendship-to-yourself-error'
 import { FriendShipAlreadyExistsError } from './errors/friendship-already-exists-error'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
+import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
 
 interface SendFriendshipRequestUseCaseRequest {
   requesterId: string
@@ -44,6 +45,8 @@ export class SendFriendshipRequestUseCase {
     })
 
     await this.friendshipsRepository.create(friendship)
+
+    DomainEvents.dispatchEventsForAggregate(friendship.id)
 
     return right({
       friendship,
