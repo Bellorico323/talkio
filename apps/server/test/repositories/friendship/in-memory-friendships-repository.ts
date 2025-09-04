@@ -1,13 +1,13 @@
 import { FriendshipsRepository } from '@/modules/friendships/application/repositories/friendships-repository'
-import { FriendShip } from '@/modules/friendships/domain/entities/friendship'
+import { Friendship } from '@/modules/friendships/domain/entities/friendship'
 
 export class InMemoryFriendshipsRepository implements FriendshipsRepository {
-  public items: FriendShip[] = []
+  public items: Friendship[] = []
 
   async findBetweenUsers(
     requesterId: string,
     addresseeId: string
-  ): Promise<FriendShip | null> {
+  ): Promise<Friendship | null> {
     const friendship = this.items.find((item) => {
       const isDirectMatch =
         item.requesterId.toString() === requesterId &&
@@ -23,11 +23,11 @@ export class InMemoryFriendshipsRepository implements FriendshipsRepository {
     return friendship || null
   }
 
-  async create(friendship: FriendShip): Promise<void> {
+  async create(friendship: Friendship): Promise<void> {
     this.items.push(friendship)
   }
 
-  async findById(friendshipId: string): Promise<FriendShip | null> {
+  async findById(friendshipId: string): Promise<Friendship | null> {
     const friendship = this.items.find(
       (item) => item.id.toString() === friendshipId
     )
@@ -35,7 +35,7 @@ export class InMemoryFriendshipsRepository implements FriendshipsRepository {
     return friendship || null
   }
 
-  async save(friendship: FriendShip): Promise<void> {
+  async save(friendship: Friendship): Promise<void> {
     const index = this.items.findIndex((item) => item.id.equals(friendship.id))
 
     if (index >= 0) {

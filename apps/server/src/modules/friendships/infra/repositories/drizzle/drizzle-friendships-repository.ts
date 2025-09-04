@@ -1,4 +1,4 @@
-import { FriendShip } from '@/modules/friendships/domain/entities/friendship'
+import { Friendship } from '@/modules/friendships/domain/entities/friendship'
 import { FriendshipsRepository } from '../../../application/repositories/friendships-repository'
 import { db } from '@/infra/database/client'
 import { and, eq, or } from 'drizzle-orm'
@@ -6,7 +6,7 @@ import { FriendshipMapper } from '../../mappers/friendship-mapper'
 import { friendships } from '@/infra/database/schema/friendships'
 
 export class DrizzleFriendshipsRepository implements FriendshipsRepository {
-  async findById(friendshipId: string): Promise<FriendShip | null> {
+  async findById(friendshipId: string): Promise<Friendship | null> {
     const result = await db.query.friendships.findFirst({
       where: eq(friendships.id, friendshipId),
     })
@@ -19,7 +19,7 @@ export class DrizzleFriendshipsRepository implements FriendshipsRepository {
   async findBetweenUsers(
     requesterId: string,
     addresseeId: string
-  ): Promise<FriendShip | null> {
+  ): Promise<Friendship | null> {
     const result = await db.query.friendships.findFirst({
       where: or(
         and(
@@ -38,12 +38,12 @@ export class DrizzleFriendshipsRepository implements FriendshipsRepository {
     return FriendshipMapper.toDomain(result)
   }
 
-  async create(friendship: FriendShip): Promise<void> {
+  async create(friendship: Friendship): Promise<void> {
     const data = FriendshipMapper.toPersistence(friendship)
     await db.insert(friendships).values(data)
   }
 
-  async save(friendship: FriendShip): Promise<void> {
+  async save(friendship: Friendship): Promise<void> {
     const data = FriendshipMapper.toPersistence(friendship)
     await db
       .update(friendships)

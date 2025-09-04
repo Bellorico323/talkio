@@ -3,21 +3,21 @@ import { NotificationsRepository } from '../repositories/notifications-repositor
 import { Notification } from '../../domain/entities/notification'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 
-interface CreateChatUserUserCaseRequest {
+interface SendNotificationUseCaseRequest {
   senderId: string
   recipientId: string
   content: string
   type: 'new_message' | 'friend_request'
 }
 
-type CreateChatUserUseCaseResponse = Either<
+type SendNotificationUseCaseResponse = Either<
   null,
   {
     notification: Notification
   }
 >
 
-export class CreateChatUserUseCase {
+export class SendNotificationUseCase {
   constructor(private notificationsRepository: NotificationsRepository) {}
 
   async execute({
@@ -25,7 +25,7 @@ export class CreateChatUserUseCase {
     recipientId,
     content,
     type,
-  }: CreateChatUserUserCaseRequest): Promise<CreateChatUserUseCaseResponse> {
+  }: SendNotificationUseCaseRequest): Promise<SendNotificationUseCaseResponse> {
     const notification = Notification.create({
       senderId: new UniqueEntityID(senderId),
       recipientId: new UniqueEntityID(recipientId),

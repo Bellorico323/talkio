@@ -1,12 +1,12 @@
-import { FriendShip } from '../../domain/entities/friendship'
+import { Friendship } from '../../domain/entities/friendship'
 
 export interface FriendshipsRepository {
   findBetweenUsers(
     requesterId: string,
     addresseeId: string
-  ): Promise<FriendShip | null>
-  create(friendship: FriendShip): Promise<void>
-  findById(friendshipId: string): Promise<FriendShip | null>
-  save(friendship: FriendShip): Promise<void>
+  ): Promise<Friendship | null>
+  create(friendship: Friendship): Promise<void>
+  findById(friendshipId: string): Promise<Friendship | null>
+  save(friendship: Friendship): Promise<void>
   remove(friendshipId: string): Promise<void>
 }

@@ -2,6 +2,8 @@ import { Either, left, right } from '@/shared/domain/either'
 import { FriendshipsRepository } from '../repositories/friendships-repository'
 import { ResourceNotFoundError } from '@/shared/domain/errors/resource-not-found-error'
 import { NotAllowedError } from '@/shared/domain/errors/not-allowed-error'
+import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
+import { Friendship } from '../../domain/entities/friendship'
 
 interface RejectFriendshipRequestUseCaseRequest {
   userId: string
@@ -10,7 +12,9 @@ interface RejectFriendshipRequestUseCaseRequest {
 
 type RejectFriendshipRequestUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
-  Record<string, never>
+  {
+    friendship: Friendship
+  }
 >
 
 export class RejectFriendshipRequestUseCase {
@@ -30,8 +34,14 @@ export class RejectFriendshipRequestUseCase {
       return left(new NotAllowedError())
     }
 
+    friendship.reject()
+
     await this.friendshipsRepository.remove(friendship.id.toString())
 
-    return right({})
+    DomainEvents.dispatchEventsForAggregate(friendship.id)
+
+    return right({
+      friendship,
+    })
   }
 }

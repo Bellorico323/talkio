@@ -11,9 +11,12 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import scalarAPIReference from '@scalar/fastify-api-reference'
+import { WebsocketGateway } from './websocket/ws-gateway'
+import fastifyWebsocket from '@fastify/websocket'
 
 async function bootstrap() {
   const app = fastify()
+  app.register(fastifyWebsocket)
 
   if (process.env.NODE_ENV === 'development') {
     app.register(fastifySwagger, {
@@ -35,7 +38,7 @@ async function bootstrap() {
   app.setSerializerCompiler(serializerCompiler)
 
   app.register(fastifyCors, {
-    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5713',
+    origin: process.env.CLIENT_ORIGIN || 'https://localhost:5713',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true,
@@ -56,9 +59,15 @@ async function bootstrap() {
 
   app.register(authModule)
 
+  app.register(async function (app) {
+    new WebsocketGateway(app)
+  })
+
   await app
     .listen({ port: 3000, host: '0.0.0.0' })
-    .then(() => console.log('🚀 HTTP server running! at http://localhost:3000'))
+    .then(() =>
+      console.log('🚀 HTTPS server running! at http://localhost:3000')
+    )
 }
 
 bootstrap()

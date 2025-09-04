@@ -1,9 +1,11 @@
 import { AggregateRoot } from '@/shared/domain/entities/aggregate-root'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { Optional } from '@/shared/domain/types/optional'
-import { SentFriendshipRequestEvent } from './sent-friendship-request-event'
+import { FriendshipRequestSentEvent } from '../events/friendship-request-sent-event'
+import { FriendshipRequestAcceptedEvent } from '../events/friendship-request-accepted-event'
+import { FriendshipRequestRejectedEvent } from '../events/friendship-request-rejected-event'
 
-export type FriendshipStatus = 'pending' | 'accepted'
+export type FriendshipStatus = 'pending' | 'accepted' | 'rejected'
 
 export interface FriendshipProps {
   requesterId: UniqueEntityID
@@ -13,7 +15,7 @@ export interface FriendshipProps {
   acceptedAt?: Date | undefined
 }
 
-export class FriendShip extends AggregateRoot<FriendshipProps> {
+export class Friendship extends AggregateRoot<FriendshipProps> {
   get status() {
     return this.props.status
   }
@@ -40,13 +42,21 @@ export class FriendShip extends AggregateRoot<FriendshipProps> {
 
     this.props.status = 'accepted'
     this.props.acceptedAt = new Date()
+
+    this.addDomainEvent(new FriendshipRequestAcceptedEvent(this))
+  }
+
+  public reject() {
+    this.props.status = 'rejected'
+
+    this.addDomainEvent(new FriendshipRequestRejectedEvent(this))
   }
 
   static create(
     props: Optional<FriendshipProps, 'status' | 'createdAt'>,
     id?: UniqueEntityID
   ) {
-    const friendship = new FriendShip(
+    const friendship = new Friendship(
       {
         ...props,
         status: 'pending',
@@ -55,7 +65,7 @@ export class FriendShip extends AggregateRoot<FriendshipProps> {
       id
     )
 
-    friendship.addDomainEvent(new SentFriendshipRequestEvent(friendship))
+    friendship.addDomainEvent(new FriendshipRequestSentEvent(friendship))
 
     return friendship
   }

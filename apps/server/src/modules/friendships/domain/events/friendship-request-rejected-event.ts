@@ -1,12 +1,12 @@
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { DomainEvent } from '@/shared/domain/events/domain-event'
-import { FriendShip } from './friendship'
+import { Friendship } from '../entities/friendship'
 
-export class SentFriendshipRequestEvent implements DomainEvent {
+export class FriendshipRequestRejectedEvent implements DomainEvent {
   ocurredAt: Date
-  friendship: FriendShip
+  friendship: Friendship
 
-  constructor(friendship: FriendShip) {
+  constructor(friendship: Friendship) {
     this.ocurredAt = new Date()
     this.friendship = friendship
   }

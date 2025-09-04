@@ -1,5 +1,5 @@
 import {
-  FriendShip,
+  Friendship,
   FriendshipProps,
 } from '@/modules/friendships/domain/entities/friendship'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
@@ -14,8 +14,8 @@ type DrizzleFriendship = {
 }
 
 export class FriendshipMapper {
-  public static toDomain(raw: DrizzleFriendship): FriendShip {
-    return FriendShip.create(
+  public static toDomain(raw: DrizzleFriendship): Friendship {
+    return Friendship.create(
       {
         requesterId: new UniqueEntityID(raw.requesterId),
         addresseeId: new UniqueEntityID(raw.addresseeId),
@@ -27,7 +27,7 @@ export class FriendshipMapper {
     )
   }
 
-  public static toPersistence(friendship: FriendShip) {
+  public static toPersistence(friendship: Friendship) {
     return {
       id: friendship.id.toString(),
       requesterId: friendship.requesterId.toString(),
