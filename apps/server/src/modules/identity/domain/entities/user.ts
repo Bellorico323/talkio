@@ -13,6 +13,30 @@ export interface UserProps {
 }
 
 export class User extends AggregateRoot<UserProps> {
+  get name(): string {
+    return this.props.name
+  }
+
+  get email(): string {
+    return this.props.email
+  }
+
+  get emailVerifield(): boolean {
+    return this.props.emailVerifield
+  }
+
+  get image(): string | null {
+    return this.props.image
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt
+  }
+
+  get updatedAt(): Date {
+    return this.props.updatedAt
+  }
+
   static create(props: Optional<UserProps, 'createdAt'>, id?: UniqueEntityID) {
     const user = new User(
       {

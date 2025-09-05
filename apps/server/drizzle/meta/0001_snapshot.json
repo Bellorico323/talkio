@@ -1,6 +1,6 @@
 {
-  "id": "9a19b81b-c3a8-4d94-9fbc-a803dd0fa725",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "cb982988-8bce-4616-bc47-e0e3b7f45f40",
+  "prevId": "9a19b81b-c3a8-4d94-9fbc-a803dd0fa725",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -487,7 +487,7 @@
           "type": "notification_type",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},

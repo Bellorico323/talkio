@@ -5,6 +5,7 @@ import { sql } from 'drizzle-orm'
 export const friendshipStatusEnum = pgEnum('friendship_status', [
   'pending',
   'accepted',
+  'rejected',
 ])
 
 export const friendships = pgTable(

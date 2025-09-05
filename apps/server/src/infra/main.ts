@@ -11,12 +11,22 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import scalarAPIReference from '@scalar/fastify-api-reference'
-import { WebsocketGateway } from './websocket/ws-gateway'
+import { instanciateGateway } from './websocket/websocket-gateway'
 import fastifyWebsocket from '@fastify/websocket'
+import { notificationModule } from '@/modules/notifications/infra/notifications.module'
+import { InMemoryEventBus } from '@/shared/domain/events/in-memory-event-bus'
+import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
 
 async function bootstrap() {
   const app = fastify()
   app.register(fastifyWebsocket)
+
+  app.register(async function (app) {
+    instanciateGateway(app)
+  })
+
+  const inMemoryEventBus = new InMemoryEventBus()
+  DomainEvents.initialize(inMemoryEventBus, inMemoryEventBus)
 
   if (process.env.NODE_ENV === 'development') {
     app.register(fastifySwagger, {
@@ -45,11 +55,19 @@ async function bootstrap() {
     maxAge: 86400,
   })
 
-  const modules: AppModule[] = [friendshipModule, chatModule]
+  const modules: AppModule[] = [
+    friendshipModule,
+    chatModule,
+    notificationModule,
+  ]
 
   for (const module of modules) {
-    if (module.execute) {
-      await module.execute()
+    if (module.registerDomainHandlers) {
+      await module.registerDomainHandlers()
+    }
+
+    if (module.registerWsHandlers) {
+      await module.registerWsHandlers()
     }
 
     if (module.routes) {
@@ -58,10 +76,6 @@ async function bootstrap() {
   }
 
   app.register(authModule)
-
-  app.register(async function (app) {
-    new WebsocketGateway(app)
-  })
 
   await app
     .listen({ port: 3000, host: '0.0.0.0' })

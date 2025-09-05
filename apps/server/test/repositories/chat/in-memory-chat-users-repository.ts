@@ -8,8 +8,16 @@ export class InMemoryChatUsersRepository implements ChatUsersRepository {
     this.items.push(chatUser)
   }
 
-  async findById(userId: string): Promise<ChatUser | null> {
-    const user = this.items.find((item) => item.id.toString() === userId)
+  async findById(chatUserId: string): Promise<ChatUser | null> {
+    const user = this.items.find((item) => item.id.toString() === chatUserId)
+
+    if (!user) return null
+
+    return user
+  }
+
+  async findByUserId(userId: string): Promise<ChatUser | null> {
+    const user = this.items.find((item) => item.userId.toString() === userId)
 
     if (!user) return null
 

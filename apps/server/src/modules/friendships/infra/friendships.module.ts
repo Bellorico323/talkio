@@ -10,6 +10,10 @@ export class FriendShipModule implements AppModule {
     app.register(acceptFriendshipController)
     app.register(rejectFriendshipController)
   }
+
+  registerDomainHandlers(): void | Promise<void> {}
+
+  registerWsHandlers(): void {}
 }
 
 export const friendshipModule = new FriendShipModule()
