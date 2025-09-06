@@ -11,22 +11,18 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import scalarAPIReference from '@scalar/fastify-api-reference'
-import { instanciateGateway } from './websocket/websocket-gateway'
 import fastifyWebsocket from '@fastify/websocket'
 import { notificationModule } from '@/modules/notifications/infra/notifications.module'
 import { InMemoryEventBus } from '@/shared/domain/events/in-memory-event-bus'
 import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
+import { websocketPlugin } from './websocket/ws-plugin'
 
 async function bootstrap() {
   const app = fastify()
+  app.register(authModule)
+
   app.register(fastifyWebsocket)
-
-  app.register(async function (app) {
-    instanciateGateway(app)
-  })
-
-  const inMemoryEventBus = new InMemoryEventBus()
-  DomainEvents.initialize(inMemoryEventBus, inMemoryEventBus)
+  app.register(websocketPlugin)
 
   if (process.env.NODE_ENV === 'development') {
     app.register(fastifySwagger, {
@@ -44,9 +40,6 @@ async function bootstrap() {
     })
   }
 
-  app.setValidatorCompiler(validatorCompiler)
-  app.setSerializerCompiler(serializerCompiler)
-
   app.register(fastifyCors, {
     origin: process.env.CLIENT_ORIGIN || 'https://localhost:5713',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -55,27 +48,33 @@ async function bootstrap() {
     maxAge: 86400,
   })
 
+  const inMemoryEventBus = new InMemoryEventBus()
+  DomainEvents.initialize(inMemoryEventBus, inMemoryEventBus)
+
+  app.setValidatorCompiler(validatorCompiler)
+  app.setSerializerCompiler(serializerCompiler)
+
   const modules: AppModule[] = [
     friendshipModule,
     chatModule,
     notificationModule,
   ]
 
-  for (const module of modules) {
-    if (module.registerDomainHandlers) {
-      await module.registerDomainHandlers()
-    }
+  app.after(async () => {
+    for (const module of modules) {
+      if (module.registerDomainHandlers) {
+        await module.registerDomainHandlers(app)
+      }
 
-    if (module.registerWsHandlers) {
-      await module.registerWsHandlers()
-    }
+      if (module.registerWsHandlers) {
+        await module.registerWsHandlers(app)
+      }
 
-    if (module.routes) {
-      await module.routes(app)
+      if (module.routes) {
+        await module.routes(app)
+      }
     }
-  }
-
-  app.register(authModule)
+  })
 
   await app
     .listen({ port: 3000, host: '0.0.0.0' })

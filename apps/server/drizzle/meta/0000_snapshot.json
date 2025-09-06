@@ -1,5 +1,5 @@
 {
-  "id": "9a19b81b-c3a8-4d94-9fbc-a803dd0fa725",
+  "id": "4aa6ac75-4b02-4db9-86d7-9c2560c774e1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -475,8 +475,20 @@
           "primaryKey": false,
           "notNull": true
         },
+        "recipient_id": {
+          "name": "recipient_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "read_at": {
           "name": "read_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
@@ -487,17 +499,30 @@
           "type": "notification_type",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "notifications_sender_id_chat_users_id_fk": {
-          "name": "notifications_sender_id_chat_users_id_fk",
+        "notifications_sender_id_user_id_fk": {
+          "name": "notifications_sender_id_user_id_fk",
           "tableFrom": "notifications",
-          "tableTo": "chat_users",
+          "tableTo": "user",
           "columnsFrom": [
             "sender_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "notifications_recipient_id_user_id_fk": {
+          "name": "notifications_recipient_id_user_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "user",
+          "columnsFrom": [
+            "recipient_id"
           ],
           "columnsTo": [
             "id"

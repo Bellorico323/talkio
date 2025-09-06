@@ -15,7 +15,7 @@ type IncomingMessage<K extends keyof MessagePayloads = keyof MessagePayloads> =
     payload: MessagePayloads[K]
   }
 
-class WebsocketGateway implements MessageGateway {
+export class WebsocketGateway implements MessageGateway {
   private connections: Map<string, Connection> = new Map()
 
   private messageHandlers: {
@@ -100,9 +100,4 @@ class WebsocketGateway implements MessageGateway {
   ) {
     this.messageHandlers[type] = handler as any
   }
-}
-
-export let wsGateway: WebsocketGateway
-export function instanciateGateway(app: FastifyInstance) {
-  if (!wsGateway) wsGateway = new WebsocketGateway(app)
 }

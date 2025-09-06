@@ -10,7 +10,9 @@ export class OnFriendshipRequestSent implements EventHandler {
     private sendNotification: SendNotificationUseCase,
     private messageGateway: MessageGateway,
     private usersRepository: UsersRepository
-  ) {}
+  ) {
+    this.setupSubscriptions()
+  }
 
   setupSubscriptions(): void {
     DomainEvents.subscribe(
@@ -32,16 +34,6 @@ export class OnFriendshipRequestSent implements EventHandler {
     })
 
     const sender = await this.usersRepository.findById(requesterId.toString())
-
-    console.log('NOTIFICATION SENT', {
-      type: 'friendship.sendRequest',
-      payload: {
-        body: {
-          sender: sender?.name ?? 'Unknown',
-          content,
-        },
-      },
-    })
 
     this.messageGateway.sendToUser(addresseeId.toString(), {
       type: 'friendship.sendRequest',

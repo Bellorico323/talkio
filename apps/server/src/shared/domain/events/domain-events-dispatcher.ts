@@ -49,7 +49,6 @@ export class DomainEvents {
     callback: DomainEventCallback<T>
   ): void {
     this.subscriber.subscribe(eventName, callback)
-    console.log('SUBSCRIBED', eventName)
   }
 
   private static findMarkedAggregateByID(
