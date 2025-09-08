@@ -16,8 +16,5 @@ export class OnUserCreated implements EventHandler {
     await this.createChatUserUseCase.execute({
       userId: user.id.toString(),
     })
-    console.log(
-      `[Event Handled] Chat user created for user ID: ${user.id.toString()}`
-    )
   }
 }

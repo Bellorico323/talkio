@@ -3,14 +3,14 @@ import { MakeDrizzleSendDirectMessage } from '../factories/drizzle/make-send-dir
 
 export function sendDirectMessageHandler(app: FastifyInstance) {
   app.wsGateway.onMessage('chat.directMessage', async (userId, { body }) => {
-    const { recipientId, senderId, content, conversationId } = body
+    const { recipientId, content, conversationId } = body
 
     const sendDirectMessageUseCase = MakeDrizzleSendDirectMessage.make()
 
     await sendDirectMessageUseCase.execute({
       content,
       recipientId,
-      senderId,
+      senderId: userId,
       conversationId,
     })
   })

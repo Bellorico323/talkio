@@ -6,8 +6,5 @@ export interface MessageGateway {
     handler: (userId: string, payload: MessagePayloads[P]) => void
   ): void
   broadcast(message: any): void
-  sendToUser<P extends keyof MessagePayloads>(
-    userId: string,
-    message: MessageOptions
-  ): void
+  sendToUser(userId: string, message: MessageOptions): void
 }

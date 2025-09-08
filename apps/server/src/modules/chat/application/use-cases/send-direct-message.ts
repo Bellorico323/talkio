@@ -3,6 +3,7 @@ import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { Conversation } from '../../domain/entities/conversation'
 import { ConversationsRepository } from '../repositories/conversations-repository'
 import { ResourceNotFoundError } from '@/shared/domain/errors/resource-not-found-error'
+import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
 
 interface SendDirectMessageUserCaseRequest {
   conversationId?: string
@@ -61,6 +62,8 @@ export class SendDirectMessageUseCase {
     } else {
       await this.conversationsRepository.save(conversation)
     }
+
+    DomainEvents.dispatchEventsForAggregate(conversation.id)
 
     return right({
       conversation,

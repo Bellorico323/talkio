@@ -10,7 +10,6 @@ export interface MessagePayloads {
   'chat.directMessage': {
     body: {
       conversationId?: string
-      senderId: string
       recipientId: string
       content: string
     }
