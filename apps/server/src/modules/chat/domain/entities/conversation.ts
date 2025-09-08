@@ -4,7 +4,8 @@ import { Optional } from '@/shared/domain/types/optional'
 import { Message } from './message'
 import { NotParticipantError } from '../../application/use-cases/errors/not-participant-error'
 import { MessagesList } from './messages-watched-list'
-import { MessageReceivedEvent } from '../events/message-received'
+import { MessageReceivedEvent } from '../events/message-received-event'
+import { GroupCreatedEvent } from '../events/group-created-event'
 
 export interface ConversationProps {
   title?: string
@@ -77,6 +78,8 @@ export class Conversation extends AggregateRoot<ConversationProps> {
     if (this.props.participantsIds.some((id) => id.equals(participantId)))
       return
 
+    if (this.ownerId && participantId === this.ownerId) return
+
     if (!this.props.isGroup && this.props.participantsIds.length >= 2) {
       throw new Error('Direct conversations can only have 2 participants.')
     }
@@ -122,6 +125,8 @@ export class Conversation extends AggregateRoot<ConversationProps> {
       },
       id
     )
+
+    groupConversation.addDomainEvent(new GroupCreatedEvent(groupConversation))
 
     return groupConversation
   }

@@ -5,7 +5,7 @@ import { chatUsers } from '../../database/schemas/chat-user'
 import { ChatUserMapper } from '../../mappers/chat-user-mapper'
 import { eq } from 'drizzle-orm'
 
-export class DrizzleChatUsersReposiroty implements ChatUsersRepository {
+export class DrizzleChatUsersRepository implements ChatUsersRepository {
   async create(chatUser: ChatUser): Promise<void> {
     const data = ChatUserMapper.toPersistence(chatUser)
 

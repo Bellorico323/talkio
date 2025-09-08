@@ -1,13 +1,16 @@
 import { Either, right } from '@/shared/domain/either'
 import { NotificationsRepository } from '../repositories/notifications-repository'
-import { Notification } from '../../domain/entities/notification'
+import {
+  Notification,
+  NotificationType,
+} from '../../domain/entities/notification'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 
 interface SendNotificationUseCaseRequest {
   senderId: string
   recipientId: string
   content: string
-  type: 'new_message' | 'friend_request'
+  type: NotificationType
 }
 
 type SendNotificationUseCaseResponse = Either<

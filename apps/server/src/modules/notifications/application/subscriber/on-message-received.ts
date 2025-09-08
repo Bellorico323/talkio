@@ -1,4 +1,4 @@
-import { MessageReceivedEvent } from '@/modules/chat/domain/events/message-received'
+import { MessageReceivedEvent } from '@/modules/chat/domain/events/message-received-event'
 import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
 import { EventHandler } from '@/shared/domain/events/event-handler'
 import { SendNotificationUseCase } from '../use-cases/send-notification'

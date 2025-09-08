@@ -2,7 +2,10 @@ import { Entity } from '@/shared/domain/entities/entity'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { Optional } from '@/shared/domain/types/optional'
 
-type NotificationType = 'new_message' | 'friend_request'
+export type NotificationType =
+  | 'new_message'
+  | 'friend_request'
+  | 'group_created'
 
 export interface NotificationProps {
   content: string

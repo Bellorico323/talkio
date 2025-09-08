@@ -28,6 +28,11 @@ export interface MessagePayloads {
       conversationId: string
     }
   }
+  'notification.groupCreated': {
+    body: {
+      groupName: string
+    }
+  }
 }
 
 export type MessageOptions = {
