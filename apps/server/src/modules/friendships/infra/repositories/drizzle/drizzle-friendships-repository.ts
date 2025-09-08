@@ -3,7 +3,7 @@ import { FriendshipsRepository } from '../../../application/repositories/friends
 import { db } from '@/infra/database/client'
 import { and, eq, or } from 'drizzle-orm'
 import { FriendshipMapper } from '../../mappers/friendship-mapper'
-import { friendships } from '@/infra/database/schema/friendships'
+import { friendships } from '@/modules/friendships/infra/database/schema/friendships'
 
 export class DrizzleFriendshipsRepository implements FriendshipsRepository {
   async findById(friendshipId: string): Promise<Friendship | null> {

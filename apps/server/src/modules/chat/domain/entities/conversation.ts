@@ -3,6 +3,7 @@ import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
 import { Optional } from '@/shared/domain/types/optional'
 import { Message } from './message'
 import { NotParticipantError } from '../../application/use-cases/errors/not-participant-error'
+import { MessagesList } from './messages-watched-list'
 
 export interface ConversationProps {
   title?: string
@@ -15,7 +16,7 @@ export interface ConversationProps {
 }
 
 export class Conversation extends AggregateRoot<ConversationProps> {
-  private _messages: Message[] = []
+  private _messages: MessagesList = new MessagesList()
 
   get title() {
     return this.props.title
@@ -41,6 +42,14 @@ export class Conversation extends AggregateRoot<ConversationProps> {
     return this.props.ownerId
   }
 
+  get groupDescription() {
+    return this.props.groupDescription
+  }
+
+  get groupImage() {
+    return this.props.groupImage
+  }
+
   public addMessage(senderId: UniqueEntityID, content: string) {
     const isParticipant = this.props.participantsIds.some((id) =>
       id.equals(senderId)
@@ -56,7 +65,7 @@ export class Conversation extends AggregateRoot<ConversationProps> {
       content: content,
     })
 
-    this._messages.push(message)
+    this._messages.add(message)
   }
 
   addParticipant(participantId: UniqueEntityID) {

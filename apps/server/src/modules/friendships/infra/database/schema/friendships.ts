@@ -1,6 +1,6 @@
-import { pgTable, text, timestamp, unique, pgEnum } from 'drizzle-orm/pg-core'
-import { user } from './auth-schema'
+import { user } from '../../../../../infra/database/schema/auth-schema'
 import { sql } from 'drizzle-orm'
+import { pgTable, text, timestamp, pgEnum, unique } from 'drizzle-orm/pg-core'
 
 export const friendshipStatusEnum = pgEnum('friendship_status', [
   'pending',

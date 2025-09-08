@@ -7,6 +7,14 @@ export interface MessagePayloads {
       content: string
     }
   }
+  'chat.directMessage': {
+    body: {
+      conversationId?: string
+      senderId: string
+      recipientId: string
+      content: string
+    }
+  }
 }
 
 export type MessageOptions = {

@@ -1,17 +1,8 @@
-import {
-  Friendship,
-  FriendshipProps,
-} from '@/modules/friendships/domain/entities/friendship'
+import { Friendship } from '@/modules/friendships/domain/entities/friendship'
 import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
+import { friendships } from '@/modules/friendships/infra/database/schema/friendships'
 
-type DrizzleFriendship = {
-  id: string
-  requesterId: string
-  addresseeId: string
-  status: 'pending' | 'accepted'
-  createdAt: Date
-  acceptedAt: Date | null
-}
+type DrizzleFriendship = typeof friendships.$inferInsert
 
 export class FriendshipMapper {
   public static toDomain(raw: DrizzleFriendship): Friendship {

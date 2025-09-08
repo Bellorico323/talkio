@@ -75,10 +75,7 @@ export class WebsocketGateway implements MessageGateway {
     })
   }
 
-  public sendToUser<P extends keyof MessagePayloads>(
-    userId: string,
-    message: MessageOptions
-  ) {
+  public sendToUser(userId: string, message: MessageOptions) {
     const connection = this.connections.get(userId)
     if (connection) {
       connection.socket.send(JSON.stringify(message))
