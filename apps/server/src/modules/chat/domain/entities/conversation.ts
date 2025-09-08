@@ -4,6 +4,7 @@ import { Optional } from '@/shared/domain/types/optional'
 import { Message } from './message'
 import { NotParticipantError } from '../../application/use-cases/errors/not-participant-error'
 import { MessagesList } from './messages-watched-list'
+import { MessageReceivedEvent } from '../events/message-received'
 
 export interface ConversationProps {
   title?: string
@@ -66,6 +67,10 @@ export class Conversation extends AggregateRoot<ConversationProps> {
     })
 
     this._messages.add(message)
+
+    this.addDomainEvent(
+      new MessageReceivedEvent(message, this.props.participantsIds)
+    )
   }
 
   addParticipant(participantId: UniqueEntityID) {

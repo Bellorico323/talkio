@@ -15,6 +15,13 @@ export interface MessagePayloads {
       content: string
     }
   }
+  'notification.messageReceived': {
+    body: {
+      senderId: string
+      content: string
+      conversationId: string
+    }
+  }
 }
 
 export type MessageOptions = {
