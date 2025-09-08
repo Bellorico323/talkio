@@ -6,6 +6,7 @@ import { ResourceNotFoundError } from '@/shared/domain/errors/resource-not-found
 import { NotAllowedError } from '@/shared/domain/errors/not-allowed-error'
 import { ConversatinIsNotGroupError } from './errors/conversation-is-not-group-error'
 import { NotParticipantError } from './errors/not-participant-error'
+import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
 
 interface SendGroupMessageUseCaseRequest {
   senderId: string
@@ -51,6 +52,8 @@ export class SendGroupMessageUseCase {
     }
 
     await this.conversationsRepository.save(conversation)
+
+    DomainEvents.dispatchEventsForAggregate(conversation.id)
 
     return right({ conversation })
   }

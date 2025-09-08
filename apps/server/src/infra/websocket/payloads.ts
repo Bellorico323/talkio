@@ -9,8 +9,15 @@ export interface MessagePayloads {
   }
   'chat.directMessage': {
     body: {
-      conversationId?: string
+      conversationId: string
       recipientId: string
+      content: string
+    }
+  }
+  'chat.groupMessage': {
+    body: {
+      recipientId: string
+      conversationId: string
       content: string
     }
   }
