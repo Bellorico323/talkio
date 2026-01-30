@@ -36,7 +36,7 @@ export class SendFriendshipRequestUseCase {
       )
 
     if (existingFriendship) {
-      left(new FriendShipAlreadyExistsError())
+      return left(new FriendShipAlreadyExistsError())
     }
 
     const friendship = Friendship.create({
