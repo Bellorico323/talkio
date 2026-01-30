@@ -28,8 +28,8 @@ describe('Send Direct Message Use Case', () => {
     expect(conversationsRepository.items).toHaveLength(1)
 
     const conversation = conversationsRepository.items[0]!
-    expect(conversation.messages).toHaveLength(1)
-    expect(conversation.messages[0]!.content).toBe('Olá! Tudo bem?')
+    expect(conversation.messages.currentItems).toHaveLength(1)
+    expect(conversation.messages.currentItems[0]!.content).toBe('Olá! Tudo bem?')
     expect(conversation.participantsIds).toHaveLength(2)
   })
 
@@ -57,8 +57,8 @@ describe('Send Direct Message Use Case', () => {
 
     const conversation = conversationsRepository.items[0]!
 
-    expect(conversation.messages).toHaveLength(1)
-    expect(conversation.messages[0]!.content).toBe('Estou bem, e você?')
+    expect(conversation.messages.currentItems).toHaveLength(1)
+    expect(conversation.messages.currentItems[0]!.content).toBe('Estou bem, e você?')
   })
 
   it('should be able to send a message to an existing conversation by its ID', async () => {
@@ -84,8 +84,8 @@ describe('Send Direct Message Use Case', () => {
     expect(conversationsRepository.items).toHaveLength(1)
 
     const conversation = conversationsRepository.items[0]!
-    expect(conversation.messages).toHaveLength(1)
-    expect(conversation.messages[0]!.content).toBe('Que bom!')
+    expect(conversation.messages.currentItems).toHaveLength(1)
+    expect(conversation.messages.currentItems[0]!.content).toBe('Que bom!')
   })
 
   it('should return an error if a non-existent conversation ID is provided', async () => {

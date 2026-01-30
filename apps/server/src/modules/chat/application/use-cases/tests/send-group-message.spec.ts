@@ -39,11 +39,11 @@ describe('Send Group Message Use Case', () => {
     expect(result.isRight()).toBe(true)
 
     const updatedConversation = conversationsRepository.items[0]!
-    expect(updatedConversation.messages).toHaveLength(1)
-    expect(updatedConversation.messages[0]!.content).toBe(
+    expect(updatedConversation.messages.currentItems).toHaveLength(1)
+    expect(updatedConversation.messages.currentItems[0]!.content).toBe(
       'Mensagem para o grupo!'
     )
-    expect(updatedConversation.messages[0]!.senderId.toString()).toBe(
+    expect(updatedConversation.messages.currentItems[0]!.senderId.toString()).toBe(
       'user-sender'
     )
   })
