@@ -1,5 +1,5 @@
 import { DomainEvent } from './domain-event'
 
 export interface EventPublisher {
-  publish(event: DomainEvent): void
+  publish(event: DomainEvent): Promise<void>
 }

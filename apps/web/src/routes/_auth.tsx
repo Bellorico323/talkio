@@ -1,5 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { MessageCircle } from 'lucide-react'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 const AuthLayout = () => (
 	<div className="grid h-screen grid-cols-2">
@@ -47,4 +46,14 @@ const AuthLayout = () => (
 	</div>
 )
 
-export const Route = createFileRoute('/_auth')({ component: AuthLayout })
+export const Route = createFileRoute('/_auth')({
+	component: AuthLayout, beforeLoad: ({ context }) => {
+		console.log(context)
+
+		if (!context.auth.isLoading && context.auth.user) {
+			throw redirect({
+				to: "/chats",
+			})
+		}
+	}
+})

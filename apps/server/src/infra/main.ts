@@ -6,9 +6,9 @@ import fastify from 'fastify'
 import { AppModule } from './contracts/app-module'
 import fastifySwagger from '@fastify/swagger'
 import {
-  jsonSchemaTransform,
-  serializerCompiler,
-  validatorCompiler,
+	jsonSchemaTransform,
+	serializerCompiler,
+	validatorCompiler,
 } from 'fastify-type-provider-zod'
 import scalarAPIReference from '@scalar/fastify-api-reference'
 import fastifyWebsocket from '@fastify/websocket'
@@ -18,69 +18,70 @@ import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
 import { websocketPlugin } from './websocket/ws-plugin'
 
 async function bootstrap() {
-  const app = fastify()
-  app.register(authModule)
+	const app = fastify()
 
-  app.register(fastifyWebsocket)
-  app.register(websocketPlugin)
+	app.register(fastifyCors, {
+		origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+		allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+		credentials: true,
+		maxAge: 86400,
+	})
 
-  if (process.env.NODE_ENV === 'development') {
-    app.register(fastifySwagger, {
-      openapi: {
-        info: {
-          title: 'Talkio api',
-          version: '1.0.0',
-        },
-      },
-      transform: jsonSchemaTransform,
-    })
+	app.register(authModule)
 
-    app.register(scalarAPIReference, {
-      routePrefix: '/docs',
-    })
-  }
+	app.register(fastifyWebsocket)
+	app.register(websocketPlugin)
 
-  app.register(fastifyCors, {
-    origin: process.env.CLIENT_ORIGIN || 'https://localhost:5713',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    credentials: true,
-    maxAge: 86400,
-  })
+	if (process.env.NODE_ENV === 'development') {
+		app.register(fastifySwagger, {
+			openapi: {
+				info: {
+					title: 'Talkio api',
+					version: '1.0.0',
+				},
+			},
+			transform: jsonSchemaTransform,
+		})
 
-  const inMemoryEventBus = new InMemoryEventBus()
-  DomainEvents.initialize(inMemoryEventBus, inMemoryEventBus)
+		app.register(scalarAPIReference, {
+			routePrefix: '/docs',
+		})
+	}
 
-  app.setValidatorCompiler(validatorCompiler)
-  app.setSerializerCompiler(serializerCompiler)
+	const inMemoryEventBus = new InMemoryEventBus()
+	DomainEvents.initialize(inMemoryEventBus, inMemoryEventBus)
 
-  const modules: AppModule[] = [
-    friendshipModule,
-    chatModule,
-    notificationModule,
-  ]
+	app.setValidatorCompiler(validatorCompiler)
+	app.setSerializerCompiler(serializerCompiler)
 
-  app.after(async () => {
-    for (const module of modules) {
-      if (module.registerDomainHandlers) {
-        await module.registerDomainHandlers(app)
-      }
+	const modules: AppModule[] = [
+		friendshipModule,
+		chatModule,
+		notificationModule,
+	]
 
-      if (module.registerWsHandlers) {
-        await module.registerWsHandlers(app)
-      }
+	app.after(async () => {
+		for (const module of modules) {
+			if (module.registerDomainHandlers) {
+				await module.registerDomainHandlers(app)
+			}
 
-      if (module.routes) {
-        await module.routes(app)
-      }
-    }
-  })
+			if (module.registerWsHandlers) {
+				await module.registerWsHandlers(app)
+			}
 
-  await app
-    .listen({ port: 3000, host: '0.0.0.0' })
-    .then(() =>
-      console.log('🚀 HTTPS server running! at http://localhost:3000')
-    )
+			if (module.routes) {
+				await module.routes(app)
+			}
+		}
+	})
+
+	await app
+		.listen({ port: 3000, host: '0.0.0.0' })
+		.then(() =>
+			console.log('🚀 HTTPS server running! at http://localhost:3000')
+		)
 }
 
 bootstrap()

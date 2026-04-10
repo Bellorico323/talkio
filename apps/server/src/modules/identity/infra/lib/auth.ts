@@ -4,39 +4,51 @@ import { db } from '@/infra/database/client'
 import * as schema from '@/infra/database/schema/_index'
 import { createAuthMiddleware } from 'better-auth/api'
 import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
-import { authResponseSchema } from '../zod-schemas/user-schema'
-import { UserMapper } from '../mappers/better-auth-user-mapper'
+import { UniqueEntityID } from '@/shared/domain/entities/unique-entity-id'
+import { User } from '../../domain/entities/user'
 
 export const auth = betterAuth({
-  hooks: {
-    after: createAuthMiddleware(async (ctx) => {
-      if (ctx.path === '/sign-up/email') {
-        console.log(ctx.context.returned)
+	user: {
+		additionalFields: {
+			username: {
+				type: "string",
+				required: true,
+				unique: true,
+			},
+		},
+	},
+	hooks: {
+		after: createAuthMiddleware(async (ctx) => {
+			if (ctx.path === '/sign-up/email') {
+				const returned = ctx.context.returned as { user?: { id?: string; name?: string; email?: string } }
+				const raw = returned?.user
 
-        const result = authResponseSchema.safeParse(ctx.context.returned)
+				if (!raw?.id || !raw?.name || !raw?.email) return
 
-        if (!result.success) {
-          throw new Error('Error creating user')
-        }
+				const user = User.create(
+					{
+						name: raw.name,
+						username: raw.name,
+						email: raw.email,
+						emailVerifield: false,
+					},
+					new UniqueEntityID(raw.id)
+				)
 
-        const { user: userCreated } = result.data
+				await DomainEvents.dispatchEventsForAggregate(user.id)
+			}
+		}),
+	},
 
-        const user = UserMapper.toDomain(userCreated)
+	emailAndPassword: {
+		enabled: true,
+	},
 
-        DomainEvents.dispatchEventsForAggregate(user.id)
-      }
-    }),
-  },
-
-  emailAndPassword: {
-    enabled: true,
-  },
-
-  database: drizzleAdapter(db, {
-    provider: 'pg',
-    schema: {
-      ...schema,
-    },
-  }),
-  trustedOrigins: ['*'],
+	database: drizzleAdapter(db, {
+		provider: 'pg',
+		schema: {
+			...schema,
+		},
+	}),
+	trustedOrigins: ['*'],
 })

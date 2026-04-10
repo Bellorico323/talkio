@@ -4,50 +4,57 @@ import { UserCreatedEvent } from '../events/user-created-event'
 import { Optional } from '@/shared/domain/types/optional'
 
 export interface UserProps {
-  name: string
-  email: string
-  emailVerifield: boolean
-  image: string | null
-  createdAt: Date
-  updatedAt: Date
+	name: string
+	username: string
+	email: string
+	emailVerifield: boolean
+	image?: string | null | undefined
+	createdAt: Date
+	updatedAt: Date
 }
 
 export class User extends AggregateRoot<UserProps> {
-  get name(): string {
-    return this.props.name
-  }
+	get name(): string {
+		return this.props.name
+	}
 
-  get email(): string {
-    return this.props.email
-  }
+	get username(): string {
+		return this.props.username
+	}
 
-  get emailVerifield(): boolean {
-    return this.props.emailVerifield
-  }
+	get email(): string {
+		return this.props.email
+	}
 
-  get image(): string | null {
-    return this.props.image
-  }
+	get emailVerifield(): boolean {
+		return this.props.emailVerifield
+	}
 
-  get createdAt(): Date {
-    return this.props.createdAt
-  }
+	get image(): string | null | undefined {
+		return this.props.image
+	}
 
-  get updatedAt(): Date {
-    return this.props.updatedAt
-  }
+	get createdAt(): Date {
+		return this.props.createdAt
+	}
 
-  static create(props: Optional<UserProps, 'createdAt'>, id?: UniqueEntityID) {
-    const user = new User(
-      {
-        ...props,
-        createdAt: props.createdAt ?? new Date(),
-      },
-      id
-    )
+	get updatedAt(): Date {
+		return this.props.updatedAt
+	}
 
-    user.addDomainEvent(new UserCreatedEvent(user))
+	static create(props: Optional<UserProps, 'createdAt' | 'updatedAt'>, id?: UniqueEntityID) {
+		const now = new Date()
+		const user = new User(
+			{
+				...props,
+				createdAt: props.createdAt ?? now,
+				updatedAt: props.updatedAt ?? now,
+			},
+			id
+		)
 
-    return user
-  }
+		user.addDomainEvent(new UserCreatedEvent(user))
+
+		return user
+	}
 }

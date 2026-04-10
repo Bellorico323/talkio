@@ -15,14 +15,12 @@ export class InMemoryEventBus implements EventPublisher, EventSubscriber {
     this.handlersMap[eventName].push(callback)
   }
 
-  public publish(event: DomainEvent): void {
+  public async publish(event: DomainEvent): Promise<void> {
     const eventName = event.constructor.name
     const handlers = this.handlersMap[eventName]
 
     if (handlers) {
-      for (const handler of handlers) {
-        handler(event)
-      }
+      await Promise.all(handlers.map((handler) => handler(event)))
     }
   }
 }

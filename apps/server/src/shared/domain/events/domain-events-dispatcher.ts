@@ -7,7 +7,7 @@ import { DomainEvent } from './domain-event'
 // Classe "morta" para segurança caso a inicialização não ocorra
 class NullImplementation implements EventPublisher, EventSubscriber {
   subscribe() {}
-  publish() {}
+  async publish() {}
 }
 
 export class DomainEvents {
@@ -33,10 +33,10 @@ export class DomainEvents {
     }
   }
 
-  public static dispatchEventsForAggregate(id: UniqueEntityID): void {
+  public static async dispatchEventsForAggregate(id: UniqueEntityID): Promise<void> {
     const aggregate = this.findMarkedAggregateByID(id)
     if (aggregate) {
-      aggregate.domainEvents.forEach((event) => this.publisher.publish(event))
+      await Promise.all(aggregate.domainEvents.map((event) => this.publisher.publish(event)))
 
       aggregate.clearEvents()
 
