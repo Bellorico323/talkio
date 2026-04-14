@@ -1,5 +1,9 @@
-import { UsersRepository } from "@/modules/identity/application/repositories/users-repository"
-import { User } from "@/modules/identity/domain/entities/user";
+import {
+	SearchUsersParams,
+	SearchUsersResult,
+	UsersRepository,
+} from '@/modules/identity/application/repositories/users-repository'
+import { User } from '@/modules/identity/domain/entities/user'
 
 export class InMemoryUsersRepository implements UsersRepository {
 	public items: User[] = []
@@ -12,9 +16,20 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return user
 	}
 
-	async searchByUsername(username: string): Promise<User[]> {
-		const users = this.items.filter((u) => u.username.toLowerCase().includes(username.toLowerCase()))
+	async searchByUsername({
+		username,
+		page,
+		limit,
+	}: SearchUsersParams): Promise<SearchUsersResult> {
+		const filtered = username
+			? this.items.filter((u) =>
+				u.username.toLowerCase().includes(username.toLowerCase())
+			)
+			: [...this.items]
 
-		return users
+		const total = filtered.length
+		const users = filtered.slice((page - 1) * limit, page * limit)
+
+		return { users, total }
 	}
 }

@@ -1,8 +1,12 @@
 import { db } from '@/infra/database/client'
 import { user } from '@/infra/database/schema/auth-schema'
-import { UsersRepository } from '@/modules/identity/application/repositories/users-repository'
+import {
+	SearchUsersParams,
+	SearchUsersResult,
+	UsersRepository,
+} from '@/modules/identity/application/repositories/users-repository'
 import { User } from '@/modules/identity/domain/entities/user'
-import { eq, ilike } from 'drizzle-orm'
+import { count, eq, ilike } from 'drizzle-orm'
 import { UserMapper } from '../../mappers/better-auth-user-mapper'
 
 export class DrizzleUsersRepository implements UsersRepository {
@@ -16,9 +20,26 @@ export class DrizzleUsersRepository implements UsersRepository {
 		return UserMapper.toDomain(drizzleUser)
 	}
 
-	async searchByUsername(username: string): Promise<User[]> {
-		const drizzleUsers = await db.select().from(user).where(ilike(user.username, `%${username}%`))
+	async searchByUsername({
+		username,
+		page,
+		limit,
+	}: SearchUsersParams): Promise<SearchUsersResult> {
+		const where = username ? ilike(user.username, `%${username}%`) : undefined
 
-		return drizzleUsers.map(UserMapper.toDomain)
+		const [drizzleUsers, [{ value: total }]] = await Promise.all([
+			db
+				.select()
+				.from(user)
+				.where(where)
+				.limit(limit)
+				.offset((page - 1) * limit),
+			db.select({ value: count() }).from(user).where(where),
+		])
+
+		return {
+			users: drizzleUsers.map(UserMapper.toDomain),
+			total,
+		}
 	}
 }
