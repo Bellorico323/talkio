@@ -16,6 +16,7 @@ import { notificationModule } from '@/modules/notifications/infra/notifications.
 import { InMemoryEventBus } from '@/shared/domain/events/in-memory-event-bus'
 import { DomainEvents } from '@/shared/domain/events/domain-events-dispatcher'
 import { websocketPlugin } from './websocket/ws-plugin'
+import { identityModule } from '@/modules/identity/infra/identity.module'
 
 async function bootstrap() {
 	const app = fastify()
@@ -59,6 +60,7 @@ async function bootstrap() {
 		friendshipModule,
 		chatModule,
 		notificationModule,
+		identityModule,
 	]
 
 	app.after(async () => {

@@ -17,7 +17,7 @@ export class UserMapper {
 			{
 				email: raw.email,
 				name: raw.name ?? 'Nome Padrão',
-				username: raw.name,
+				username: raw.username,
 				emailVerifield: false,
 				image: raw.image,
 				createdAt: raw.createdAt,
