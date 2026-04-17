@@ -27,7 +27,7 @@ export class DrizzleUsersRepository implements UsersRepository {
 	}: SearchUsersParams): Promise<SearchUsersResult> {
 		const where = username ? ilike(user.username, `%${username}%`) : undefined
 
-		const [drizzleUsers, [{ value: total }]] = await Promise.all([
+		const [drizzleUsers, countResult] = await Promise.all([
 			db
 				.select()
 				.from(user)
@@ -39,7 +39,7 @@ export class DrizzleUsersRepository implements UsersRepository {
 
 		return {
 			users: drizzleUsers.map(UserMapper.toDomain),
-			total,
+			total: countResult[0]?.value ?? 0,
 		}
 	}
 }
