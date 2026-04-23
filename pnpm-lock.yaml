@@ -66,6 +66,9 @@ importers:
       '@talkio/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@talkio/prettier-config':
+        specifier: workspace:*
+        version: link:../../packages/prettier-config
       '@talkio/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
